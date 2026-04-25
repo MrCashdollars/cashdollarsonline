@@ -23,6 +23,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
+        // mirrors tsconfig paths so @/lib/utils etc. resolve at bundle time
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
