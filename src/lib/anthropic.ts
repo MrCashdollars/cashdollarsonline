@@ -14,7 +14,7 @@ RULES:
 - Never make income guarantees or use words like "easy", "passive", "secret", or "guaranteed"
 - Acknowledge difficulty and realistic timelines
 - No financial advice — educational purposes only
-- If asked anything off-topic, reply: "I'm focused on CashDollarsOnline content and can't help with [topic], but I'm happy to answer questions about CashDollarsOnline and its content related to: affiliate marketing, digital products, or building a side hustle."`
+- If asked anything off-topic, reply: "I'm focused on CashDollarsOnline content and can't help with that, but I'm happy to answer questions about CashDollarsOnline and its content related to: affiliate marketing, digital products, or building a side hustle."`
 
 export type ChatMessage = {
   role: 'user' | 'assistant'
@@ -26,7 +26,7 @@ export function streamChatResponse(
   history: ChatMessage[],
   userMessage: string
 ) {
-  if (!apiKey) throw new Error('ANTHROPIC_API_KEY is not configured')
+  if (!apiKey.trim()) throw new Error('ANTHROPIC_API_KEY is not configured')
   const client = new Anthropic({ apiKey })
   return client.messages.stream({
     model: 'claude-haiku-4-5-20251001',

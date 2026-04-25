@@ -60,3 +60,24 @@ describe('streamChatResponse', () => {
     expect(result).toBe(mockStreamReturn)
   })
 })
+
+describe('SYSTEM_PROMPT content', () => {
+  it('bans the anti-hype words listed in CLAUDE.md §8', () => {
+    expect(SYSTEM_PROMPT).toContain('"easy"')
+    expect(SYSTEM_PROMPT).toContain('"guaranteed"')
+    expect(SYSTEM_PROMPT).toContain('"passive"')
+    expect(SYSTEM_PROMPT).toContain('"secret"')
+  })
+
+  it('requires no financial advice disclaimer', () => {
+    expect(SYSTEM_PROMPT).toContain('No financial advice')
+  })
+
+  it('includes the off-topic redirect instruction', () => {
+    expect(SYSTEM_PROMPT).toContain("I'm focused on CashDollarsOnline content and can't help with that")
+  })
+
+  it('limits response length to 3–5 sentences', () => {
+    expect(SYSTEM_PROMPT).toContain('3–5 sentences')
+  })
+})
