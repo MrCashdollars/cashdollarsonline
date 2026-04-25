@@ -1,0 +1,100 @@
+---
+// Shared HTML shell for every page on the site.
+// SEO, OG tags, and canonical URLs are controlled here.
+// TODO: import Nav and Footer components once built.
+
+import '../styles/global.css'
+
+interface Props {
+  /** Page title — appears in <title> and OG tags */
+  title: string
+  /** Meta description (150–160 chars per CLAUDE.md §9) */
+  description: string
+  /** OG image URL — defaults to site-wide share image */
+  ogImage?: string
+  /** Explicit canonical URL — defaults to current page URL */
+  canonicalUrl?: string
+  /** Schema.org JSON-LD — pass as a serialised string */
+  schemaJson?: string
+  /** Set true on pages with affiliate links — adds income disclaimer */
+  hasAffiliate?: boolean
+}
+
+const {
+  title,
+  description,
+  ogImage = '/og-default.png',
+  canonicalUrl = Astro.url.href,
+  schemaJson,
+  hasAffiliate = false,
+} = Astro.props
+
+const SITE_NAME = 'Cash Dollars Online'
+const fullTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`
+
+// Plausible script URL — only injected if PLAUSIBLE_DOMAIN is set
+const plausibleDomain = import.meta.env.PLAUSIBLE_DOMAIN
+const plausibleHost = import.meta.env.PLAUSIBLE_API_HOST ?? 'https://plausible.io'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph (see CLAUDE.md §9) -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+
+    <!-- TODO: add <link rel="icon"> once logo asset is received from user -->
+    <!-- TODO: add <link rel="preconnect"> for Google Fonts (Inter) once confirmed -->
+
+    {schemaJson && <script type="application/ld+json" set:html={schemaJson} />}
+
+    <!-- Plausible Analytics — privacy-friendly, no cookie consent needed -->
+    <!-- Only injected when PLAUSIBLE_DOMAIN env var is set (see .env.example) -->
+    {
+      plausibleDomain && (
+        <script
+          defer
+          data-domain={plausibleDomain}
+          src={`${plausibleHost}/js/script.js`}
+        />
+      )
+    }
+
+    <title>{fullTitle}</title>
+  </head>
+  <body class="min-h-screen flex flex-col bg-white text-gray-900">
+    <!-- TODO: <Nav /> — top navigation component -->
+    <main class="flex-1">
+      <!-- FTC income disclaimer — shown on pages with affiliate content -->
+      {
+        hasAffiliate && (
+          <div class="bg-amber-50 border-b border-amber-200 text-amber-900 text-sm py-2 px-4 text-center">
+            <strong>Disclosure:</strong> Some links on this page are affiliate links. If you purchase
+            through them, we may earn a commission at no extra cost to you.{' '}
+            <a href="/disclaimer" class="underline font-medium">
+              Full disclosure
+            </a>
+          </div>
+        )
+      }
+      <slot />
+    </main>
+    <!-- TODO: <Footer /> — footer with email signup, links, legal -->
+  </body>
+</html>

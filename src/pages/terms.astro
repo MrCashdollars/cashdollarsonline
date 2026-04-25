@@ -1,0 +1,50 @@
+---
+// Terms of Service — /terms
+// [DRAFT] — user must review and approve all legal copy.
+// Have a lawyer verify before launch.
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const lastUpdated = '2026-04-25' // [VERIFY: update when terms are finalised]
+---
+
+<BaseLayout
+  title="Terms of Service"
+  description="Cash Dollars Online terms of service."
+>
+  <div class="container-content section-padding">
+    <h1 class="text-3xl font-bold mb-2">Terms of Service</h1>
+    <p class="text-sm text-gray-500 mb-12">Last updated: {lastUpdated}</p>
+
+    <div class="prose prose-gray max-w-none space-y-8">
+      <p class="bg-amber-50 border border-amber-200 rounded-lg p-4 text-amber-900 text-sm">
+        [DRAFT — user must review. Have a lawyer verify before launch.]
+      </p>
+
+      <section>
+        <h2>Use of This Site</h2>
+        <p>[DRAFT] By using this site, you agree to these terms. This site provides educational content about online income strategies. Nothing on this site constitutes financial, legal, or professional advice.</p>
+      </section>
+
+      <section>
+        <h2>Intellectual Property</h2>
+        <p>[DRAFT] All content on this site — including guides, videos, and written content — is owned by Cash Dollars Online unless otherwise stated. You may not reproduce or redistribute content without written permission.</p>
+      </section>
+
+      <section>
+        <h2>Affiliate Links</h2>
+        <p>[DRAFT] Some links on this site are affiliate links. See our <a href="/disclaimer">full disclaimer</a>.</p>
+      </section>
+
+      <section>
+        <h2>Limitation of Liability</h2>
+        <p>[DRAFT] We make no guarantees about income or results. Your results will vary based on your effort, experience, and market conditions. See our <a href="/disclaimer">income disclaimer</a>.</p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>[DRAFT] Questions? <a href="/contact">Contact us here</a>.</p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

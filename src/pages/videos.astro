@@ -1,0 +1,63 @@
+---
+// Video library — /videos
+// Required features per CLAUDE.md §5.5:
+//   - Pulls from YouTube channel feed (YouTube Data API v3)
+//   - Organized by series: Foundation / Affiliate Marketing / Digital Products
+//   - Search/filter by topic
+//   - Each card: thumbnail, title, length, "Watch on YouTube" CTA
+//   - Goal is to grow the channel — link out, don't try to keep them on-site
+//
+// Schema: VideoObject per video (see CLAUDE.md §9)
+// Data: getLatestVideos() from src/lib/youtube.ts
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+// import { getLatestVideos } from '../lib/youtube'
+
+// TODO: uncomment when youtube.ts is implemented
+// const videos = await getLatestVideos(24)
+---
+
+<BaseLayout
+  title="Video Library"
+  description="[DRAFT] All Cash Dollars Online YouTube videos, organized by topic. Affiliate marketing, digital products, and content monetization."
+>
+  <div class="container-wide section-padding">
+    <h1 class="text-3xl font-bold mb-4">Video Library</h1>
+    <p class="text-gray-600 mb-12 max-w-2xl">
+      [DRAFT] Every video organized by series so you can go deep on a topic without jumping around.
+      All videos are on YouTube — links take you straight there.
+    </p>
+
+    <!-- TODO: search/filter component by topic -->
+
+    <!-- Series: Foundation -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">Foundation</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-gray-400 col-span-full py-8 text-center">
+          [Videos loading from YouTube API — lib/youtube.ts to be implemented]
+        </p>
+      </div>
+    </section>
+
+    <!-- Series: Affiliate Marketing -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">Affiliate Marketing</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-gray-400 col-span-full py-8 text-center">
+          [Videos loading from YouTube API]
+        </p>
+      </div>
+    </section>
+
+    <!-- Series: Digital Products -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-semibold mb-6">Digital Products</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p class="text-gray-400 col-span-full py-8 text-center">
+          [Videos loading from YouTube API]
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

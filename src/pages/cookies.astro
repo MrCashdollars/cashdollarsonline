@@ -1,0 +1,47 @@
+---
+// Cookie Policy — /cookies
+// Required if using analytics (see CLAUDE.md §9)
+// Plausible Analytics does NOT set cookies, so this page is minimal.
+// Update if switching to GA4 or any cookie-based analytics.
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const lastUpdated = '2026-04-25'
+---
+
+<BaseLayout
+  title="Cookie Policy"
+  description="Cash Dollars Online cookie policy — we keep it simple."
+>
+  <div class="container-content section-padding">
+    <h1 class="text-3xl font-bold mb-2">Cookie Policy</h1>
+    <p class="text-sm text-gray-500 mb-12">Last updated: {lastUpdated}</p>
+
+    <div class="prose prose-gray max-w-none space-y-8">
+      <section>
+        <h2>The Short Version</h2>
+        <p>[DRAFT] This site uses Plausible Analytics, which does not set cookies and does not collect personal data. We do not use advertising cookies, tracking pixels, or third-party retargeting.</p>
+      </section>
+
+      <section>
+        <h2>What Are Cookies?</h2>
+        <p>[DRAFT] Cookies are small text files stored on your device by websites. They are commonly used for tracking, analytics, and remembering preferences.</p>
+      </section>
+
+      <section>
+        <h2>What We Use</h2>
+        <p>[DRAFT] Plausible Analytics — privacy-friendly, no cookies, GDPR-compliant by design. See <a href="https://plausible.io/privacy-focused-web-analytics" target="_blank" rel="noopener noreferrer">Plausible's privacy page</a>.</p>
+      </section>
+
+      <section>
+        <h2>If Analytics Change</h2>
+        <p>[DRAFT] If we ever add cookie-based analytics (e.g., Google Analytics), we will update this policy and add a cookie consent banner before doing so.</p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>[DRAFT] Questions? <a href="/contact">Contact us</a>.</p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+// Resources / Tools — /resources
+// Required features per CLAUDE.md §5.6:
+//   - Curated tool recommendations with HONEST affiliate disclosures
+//   - Categories: Email / Website builders / Design / Analytics / etc.
+//   - Each tool: what it does, how we use it, real cost, alternatives
+//   - FTC-compliant disclosure at TOP of page AND next to each affiliate link
+//
+// ANTI-HYPE: never recommend a tool we don't actually use
+// See CLAUDE.md §8 and §9 (FTC compliance)
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const categories = [
+  'Email Marketing',
+  'Website Builders',
+  'Design Tools',
+  'Analytics',
+  'Productivity',
+]
+---
+
+<BaseLayout
+  title="Resources & Tools"
+  description="[DRAFT] Honest reviews of the tools we actually use to run this online business. Real costs, real alternatives, no sugarcoating."
+  hasAffiliate={true}
+>
+  <!-- FTC affiliate disclosure — also injected by BaseLayout's hasAffiliate prop -->
+  <div class="bg-amber-50 border-b border-amber-200 py-4">
+    <div class="container-content">
+      <p class="text-sm text-amber-900">
+        <strong>Affiliate Disclosure:</strong> This page contains affiliate links marked with [affiliate].
+        If you purchase through them, we earn a small commission at no extra cost to you. We only list
+        tools we've personally used. <a href="/disclaimer" class="underline">Full disclosure policy</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="container-wide section-padding">
+    <h1 class="text-3xl font-bold mb-4">Resources & Tools</h1>
+    <p class="text-gray-600 mb-12 max-w-2xl">
+      [DRAFT] These are the tools we actually use. Each listing includes real pricing, honest pros
+      and cons, and cheaper alternatives where they exist.
+    </p>
+
+    <!-- Category navigation -->
+    <nav class="flex flex-wrap gap-2 mb-12" aria-label="Tool categories">
+      {
+        categories.map((cat) => (
+          <a
+            href={`#${cat.toLowerCase().replace(/\s+/g, '-')}`}
+            class="px-4 py-2 rounded-full border border-gray-200 text-sm hover:border-brand-green-800 hover:text-brand-green-800 transition-colors"
+          >
+            {cat}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- TODO: populate each category with real tools + affiliate links -->
+    <!-- Each tool needs: name, description, what we use it for, real cost, alternatives, affiliate link (clearly labeled) -->
+    {
+      categories.map((cat) => (
+        <section id={cat.toLowerCase().replace(/\s+/g, '-')} class="mb-16">
+          <h2 class="text-2xl font-semibold mb-6">{cat}</h2>
+          <div class="space-y-6">
+            <div class="bg-white border border-gray-100 rounded-xl p-6">
+              <p class="text-gray-400 text-sm">
+                [Tools in this category — to be filled with real recommendations from user]
+              </p>
+            </div>
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

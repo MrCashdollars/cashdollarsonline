@@ -1,0 +1,82 @@
+---
+// Individual blog post — /blog/[slug]
+// Required features per CLAUDE.md §5.4:
+//   - Clean reading layout
+//   - Related posts
+//   - Email CTA in-body and at end of post
+//   - Estimated read time + last-updated date
+//
+// Schema: Article (see CLAUDE.md §9)
+// Data: getPostBySlug(slug) from src/lib/wordpress.ts
+
+import type { GetStaticPaths } from 'astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+// import { getAllPosts, getPostBySlug } from '../../lib/wordpress'
+
+// TODO: uncomment when wordpress.ts is implemented
+export const getStaticPaths: GetStaticPaths = async () => {
+  // const posts = await getAllPosts()
+  // return posts.map((post) => ({
+  //   params: { slug: post.slug },
+  //   props: { post },
+  // }))
+
+  // Placeholder — remove once lib is wired
+  return []
+}
+
+const { slug } = Astro.params
+// TODO: const { post } = Astro.props
+
+const schemaArticle = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: '[post.title]',
+  datePublished: '[post.date]',
+  dateModified: '[post.modified]',
+  author: {
+    '@type': 'Person',
+    name: '[VERIFY: founder name]',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Cash Dollars Online',
+    url: 'https://cashdollarsonline.com',
+  },
+})
+---
+
+<BaseLayout
+  title="[Post Title]"
+  description="[Post excerpt]"
+  schemaJson={schemaArticle}
+>
+  <article class="container-content section-padding">
+    <header class="mb-12">
+      <h1 class="text-3xl font-bold mb-4">[Post title — loading from WordPress]</h1>
+      <div class="flex gap-4 text-sm text-gray-500">
+        <span>[Date]</span>
+        <span>·</span>
+        <span>[X min read]</span>
+        <span>·</span>
+        <span>Updated [date]</span>
+      </div>
+    </header>
+
+    <!-- TODO: post body — rendered from WordPress HTML or converted to MDX -->
+    <div class="prose prose-gray max-w-none mb-12">
+      <p class="text-gray-400">[Post content — loading from WordPress slug: {slug}]</p>
+    </div>
+
+    <!-- In-body email CTA -->
+    <div class="bg-brand-green-50 border border-brand-green-200 rounded-xl p-6 my-12">
+      <h3 class="font-semibold text-lg mb-2">Get the free guide</h3>
+      <p class="text-gray-600 text-sm mb-4">
+        [DRAFT] Practical roadmap for your first $100 online.
+      </p>
+      <!-- TODO: SendFox embed or form component -->
+    </div>
+
+    <!-- TODO: related posts section -->
+  </article>
+</BaseLayout>

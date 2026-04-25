@@ -1,0 +1,56 @@
+---
+// Free guides index — /free-guides
+// Required features per CLAUDE.md §5.3:
+//   - Index page listing all 9 lead magnets
+//   - Each card: clear deliverable description, what's inside, CTA to individual page
+//   - NO fake urgency, NO fake countdowns, NO "limited spots"
+//
+// Individual landing pages will live at /free-guides/[slug]
+// TODO: create individual pages once user provides the 9 PDF files
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+// Placeholder guide data — to be replaced with real guide info from user
+// User has 9 existing PDFs — request files and titles before populating
+const guides: Array<{ slug: string; title: string; description: string }> = [
+  // TODO: populate with real guide data once user provides PDF files
+  // Example structure:
+  // { slug: 'affiliate-marketing-starter', title: 'Affiliate Marketing Starter Guide', description: '...' },
+]
+---
+
+<BaseLayout
+  title="Free Guides"
+  description="[DRAFT] Free, practical guides for building supplemental income online. Download any guide — no tricks, just useful content."
+>
+  <div class="container-wide section-padding">
+    <h1 class="text-3xl font-bold mb-4">Free Guides</h1>
+    <p class="text-gray-600 mb-12 max-w-2xl">
+      [DRAFT] Everything here is free. No upsells buried inside. Just useful, actionable content —
+      pick whatever topic you're working on right now.
+    </p>
+
+    {
+      guides.length === 0 ? (
+        <div class="text-center py-16 text-gray-400">
+          <p>[Guide cards — awaiting user-provided PDF files and titles]</p>
+          <p class="text-sm mt-2">
+            9 PDFs expected. Request files from user before populating.
+          </p>
+        </div>
+      ) : (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {guides.map((guide) => (
+            <div class="bg-white border border-gray-100 rounded-xl p-6 hover:shadow-md transition-shadow">
+              <h2 class="font-semibold text-lg mb-2">{guide.title}</h2>
+              <p class="text-gray-600 text-sm mb-4">{guide.description}</p>
+              <a href={`/free-guides/${guide.slug}`} class="btn-primary text-sm px-4 py-2">
+                Get This Guide
+              </a>
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>

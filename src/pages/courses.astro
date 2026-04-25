@@ -1,0 +1,46 @@
+---
+// Courses / Membership — /courses
+// Status: Coming Soon (Year 2 feature — see CLAUDE.md §12)
+// Required features per CLAUDE.md §5.7:
+//   - Coming Soon page
+//   - Email capture for launch notification
+//   - NO fake launch dates, NO fake countdowns
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Courses"
+  description="[DRAFT] Cash Dollars Online courses — coming soon. Sign up to be notified when we launch."
+>
+  <div class="container-content section-padding text-center">
+    <div class="max-w-lg mx-auto">
+      <p class="text-sm font-semibold uppercase tracking-widest text-brand-green-800 mb-4">
+        Coming Soon
+      </p>
+      <h1 class="text-3xl font-bold mb-4">Courses Are in the Works</h1>
+      <p class="text-gray-600 mb-8">
+        [DRAFT] We're building structured courses that walk you through building real online income
+        step by step. No launch date is confirmed yet — we'll email you when it's ready.
+      </p>
+
+      <!-- Email capture for launch notification — SendFox -->
+      <!-- TODO: replace with SendFox embed (confirm form ID with user) -->
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
+        <input
+          type="email"
+          placeholder="your@email.com"
+          required
+          class="flex-1 px-4 py-3 rounded-lg border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-green-800"
+        />
+        <button type="submit" class="btn-primary whitespace-nowrap"> Notify Me </button>
+      </form>
+      <p class="text-xs text-gray-400">Opt-in only. No spam. Unsubscribe any time.</p>
+
+      <p class="mt-12 text-sm text-gray-500">
+        In the meantime, check out the <a href="/free-guides" class="underline">free guides</a> and
+        <a href="/videos" class="underline">video library</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

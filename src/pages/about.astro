@@ -1,0 +1,89 @@
+---
+// About page — /about
+// Required content per CLAUDE.md §5.2:
+//   - Founder story (honest, including failures)
+//   - Why this channel exists (the anti-hype mission)
+//   - What we will and won't teach
+//   - Personal photo (real, not stock)
+//
+// Schema: Person (see CLAUDE.md §9)
+// Copy: [DRAFT] — all copy needs user review and personal story
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+
+const schemaPerson = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: '[VERIFY: founder name]',
+  url: 'https://cashdollarsonline.com/about',
+  sameAs: ['https://youtube.com/@cashdollarsonline2195'],
+  jobTitle: 'Creator',
+  description: '[DRAFT: one-sentence founder description]',
+})
+---
+
+<BaseLayout
+  title="About"
+  description="[DRAFT] The real story behind Cash Dollars Online — why it exists, what we teach, and what we won't."
+  schemaJson={schemaPerson}
+>
+  <div class="container-content section-padding">
+    <!-- ============================================================
+         Founder section
+         Components: sections/FounderStory.astro
+         IMPORTANT: Personal photo required — no stock photos
+         ============================================================ -->
+    <section data-section="founder-intro" class="mb-16">
+      <!-- TODO: personal photo (real, not stock — see CLAUDE.md §8) -->
+      <div class="w-24 h-24 rounded-full bg-gray-200 mb-6 flex items-center justify-center">
+        <span class="text-gray-400 text-xs text-center">Photo<br />(coming)</span>
+      </div>
+
+      <h1 class="text-4xl font-bold mb-4">[DRAFT: Founder Name]</h1>
+      <p class="text-xl text-gray-600 mb-8">Creator of Cash Dollars Online</p>
+
+      <!-- TODO: founder story — honest, including early failures and mistakes -->
+      <div class="prose prose-gray max-w-none">
+        <p class="text-gray-600">[DRAFT — user to write founder story here. Include honest timeline, what didn't work, what changed, and why the channel exists. See CLAUDE.md §5.2]</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         Anti-hype mission statement
+         ============================================================ -->
+    <section data-section="mission" class="mb-16 bg-brand-green-50 rounded-xl p-8">
+      <h2 class="text-2xl font-semibold mb-4">Why This Channel Exists</h2>
+      <p class="text-gray-700">
+        [DRAFT — user to review] The internet is full of people selling the dream. We're here to
+        provide the roadmap. That means honest timelines, real costs, and zero hype.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         Will / Won't teach section
+         ============================================================ -->
+    <section data-section="will-wont-teach" class="mb-16">
+      <h2 class="text-2xl font-semibold mb-8">What We Will — and Won't — Teach</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-semibold text-brand-green-800 mb-4">We will teach:</h3>
+          <ul class="space-y-2 text-gray-700">
+            <!-- TODO: fill with real content -->
+            <li class="flex gap-2">✓ [DRAFT item]</li>
+            <li class="flex gap-2">✓ [DRAFT item]</li>
+            <li class="flex gap-2">✓ [DRAFT item]</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold text-red-700 mb-4">We won't teach:</h3>
+          <ul class="space-y-2 text-gray-700">
+            <!-- TODO: fill with real content -->
+            <li class="flex gap-2">✗ [DRAFT item]</li>
+            <li class="flex gap-2">✗ [DRAFT item]</li>
+            <li class="flex gap-2">✗ [DRAFT item]</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

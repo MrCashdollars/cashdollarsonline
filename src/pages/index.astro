@@ -1,0 +1,87 @@
+---
+// Homepage — /
+// Section order follows component file order (1.txt → 6.txt):
+//   1. PrismaHero        — full-screen brand hero with animated tagline
+//   2. HeroSection       — content category showcase with animated grid
+//   3. StickyFeatureSection — three income paths (sticky scroll)
+//   4. Email capture strip + LeadMagnetDialog CTA
+//   5. AIAssistantInterface — CDO chatbot (placed below email capture per user spec)
+//   6. BlogCards + TestimonialMarquee
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { PrismaHero } from '../components/ui/prisma-hero'
+import HeroSection from '../components/ui/hero-section'
+import { StickyFeatureSection } from '../components/ui/sticky-scroll-cards-section'
+import { LeadMagnetDialog } from '../components/ui/dialog'
+import { AIAssistantInterface } from '../components/ui/ai-assistant-interface'
+import { BlogCards, TestimonialMarquee } from '../components/ui/cards'
+
+const schemaOrg = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Cash Dollars Online',
+  url: 'https://cashdollarsonline.com',
+  sameAs: ['https://youtube.com/@cashdollarsonline2195'],
+  description:
+    'Honest, practical guides for building supplemental income online. No hype. No shortcuts. Just systems and roadmaps.',
+})
+---
+
+<BaseLayout
+  title="Cash Dollars Online"
+  description="[DRAFT] We don't sell dreams. We provide roadmaps. Practical, honest strategies for building $1K/month in supplemental income online."
+  schemaJson={schemaOrg}
+>
+
+  <!-- ① Prisma Hero (1.txt) — full-screen, above the fold -->
+  <PrismaHero client:load />
+
+  <!-- ② Content category showcase (2.txt) -->
+  <HeroSection client:visible />
+
+  <!-- ③ Three income paths — sticky scroll cards (3.txt) -->
+  <StickyFeatureSection client:visible />
+
+  <!-- ④ Email capture strip with Dialog CTA (4.txt) -->
+  <section class="bg-brand-green-800 py-16 px-4" aria-labelledby="email-capture-heading">
+    <div class="max-w-2xl mx-auto text-center">
+      <p class="text-brand-green-100 text-sm font-semibold uppercase tracking-widest mb-3">
+        Free Resource
+      </p>
+      <h2 id="email-capture-heading" class="text-3xl font-bold text-white mb-4">
+        <!-- [DRAFT — user to review] -->
+        Get the Free Starter Guide
+      </h2>
+      <p class="text-brand-green-100 mb-8 max-w-lg mx-auto leading-relaxed">
+        <!-- [DRAFT — user to review] -->
+        A practical, no-fluff roadmap for your first $100 online. Most people hit it in 3–6
+        months with consistent effort. We show you exactly what that looks like.
+      </p>
+
+      <!-- Dialog trigger (React, hydrates on visible) -->
+      <LeadMagnetDialog client:visible />
+
+      <p class="text-xs text-brand-green-300 mt-4">
+        Opt-in only. No spam. Unsubscribe any time.
+      </p>
+    </div>
+  </section>
+
+  <!-- ⑤ AI Chatbot (5.txt) — placed directly below email capture per user spec -->
+  <section aria-labelledby="chatbot-heading" class="border-t border-gray-100">
+    <div class="text-center pt-12 px-4">
+      <p class="text-xs text-gray-400 uppercase tracking-widest mb-1 font-semibold">
+        Powered by CDO AI
+      </p>
+    </div>
+    <AIAssistantInterface client:visible />
+  </section>
+
+  <!-- ⑥a Blog post cards (6.txt) -->
+  <BlogCards client:visible />
+
+  <!-- ⑥b Testimonial marquee (6.txt) -->
+  <!-- NOTE: placeholders below — replace with real testimonials before launch -->
+  <TestimonialMarquee client:visible />
+
+</BaseLayout>
