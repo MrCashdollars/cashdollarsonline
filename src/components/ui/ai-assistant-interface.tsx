@@ -1,19 +1,3 @@
-// Adapted from 5.txt (ai-assistant-interface.tsx)
-// Placed below the email capture section as an interactive AI chatbot
-// for Cash Dollars Online visitors.
-//
-// Changes from original:
-//   • Blue color scheme → brand green (#2E7D32)
-//   • Logo SVG → CDO coin-stack icon (brand colors)
-//   • Headline/subtitle → CDO context
-//   • Command categories → online income topics
-//   • Suggestions → CDO-relevant questions
-//   • handleSendMessage → stubbed for future Anthropic API integration
-//   • Added placeholder "typing" response to show the UX is live
-//
-// TODO (next session): wire handleSendMessage to an Astro API endpoint
-//   that calls Anthropic claude-haiku-4-5-20251001 with a CDO system prompt
-
 'use client'
 
 import type React from 'react'
@@ -30,6 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { LeadMagnetDialog } from './dialog'
 
 /* ── CDO-specific command suggestions ──────────────────────────────── */
 const commandSuggestions = {
@@ -58,16 +43,25 @@ const commandSuggestions = {
 
 type CategoryKey = keyof typeof commandSuggestions
 
-/* ── Chat message type ──────────────────────────────────────────────── */
 interface Message {
   role: 'user' | 'assistant'
   content: string
 }
 
-/* ── Placeholder bot responses (until real API is wired) ───────────── */
-const placeholderResponses: Record<string, string> = {
-  default:
-    "Great question! I'm still being set up with full AI capabilities. In the meantime, check out the free guides or browse the video library for detailed answers. I'll be fully live soon.",
+const SESSION_KEY = 'cdo_msg_count'
+const MSG_LIMIT = 5
+const ERROR_MSG =
+  'The AI assistant is temporarily unavailable — please try again shortly.'
+
+function getSessionCount(): number {
+  if (typeof window === 'undefined') return 0
+  return parseInt(sessionStorage.getItem(SESSION_KEY) ?? '0', 10)
+}
+
+function incrementSessionCount(): number {
+  const next = getSessionCount() + 1
+  sessionStorage.setItem(SESSION_KEY, String(next))
+  return next
 }
 
 export function AIAssistantInterface() {
@@ -77,6 +71,7 @@ export function AIAssistantInterface() {
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([])
   const [showUploadAnimation, setShowUploadAnimation] = useState(false)
   const [activeCommandCategory, setActiveCommandCategory] = useState<CategoryKey | null>(null)
+  const [showRateLimitCTA, setShowRateLimitCTA] = useState(() => getSessionCount() >= MSG_LIMIT)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleUploadFile = () => {
@@ -94,19 +89,87 @@ export function AIAssistantInterface() {
   }
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return
+    if (!inputValue.trim() || showRateLimitCTA) return
+
+    if (getSessionCount() >= MSG_LIMIT) {
+      setShowRateLimitCTA(true)
+      return
+    }
+
     const userMessage = inputValue.trim()
+    const currentHistory = messages
     setInputValue('')
     setMessages((prev) => [...prev, { role: 'user', content: userMessage }])
     setIsTyping(true)
 
-    // TODO: Replace with real API call to /api/chat endpoint
-    // The endpoint should call Anthropic claude-haiku-4-5-20251001
-    // with a CDO-specific system prompt (honest, anti-hype, income-focused)
-    await new Promise((r) => setTimeout(r, 1200))
-    const reply = placeholderResponses.default
-    setMessages((prev) => [...prev, { role: 'assistant', content: reply }])
-    setIsTyping(false)
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage, history: currentHistory }),
+      })
+
+      if (!response.ok || !response.body) throw new Error('Request failed')
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let assistantAdded = false
+      let finished = false
+
+      while (!finished) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const text = decoder.decode(value, { stream: true })
+        const lines = text.split('\n\n').filter(Boolean)
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue
+          const data = line.slice(6)
+
+          if (data === '[DONE]') {
+            const newCount = incrementSessionCount()
+            if (newCount >= MSG_LIMIT) setShowRateLimitCTA(true)
+            finished = true
+            break
+          }
+
+          try {
+            const parsed = JSON.parse(data) as { token?: string; error?: string }
+
+            if (parsed.error) {
+              setIsTyping(false)
+              setMessages((prev) => [...prev, { role: 'assistant', content: ERROR_MSG }])
+              finished = true
+              break
+            }
+
+            if (parsed.token) {
+              if (!assistantAdded) {
+                setIsTyping(false)
+                setMessages((prev) => [...prev, { role: 'assistant', content: parsed.token! }])
+                assistantAdded = true
+              } else {
+                setMessages((prev) => {
+                  const updated = [...prev]
+                  updated[updated.length - 1] = {
+                    role: 'assistant',
+                    content: updated[updated.length - 1].content + parsed.token,
+                  }
+                  return updated
+                })
+              }
+            }
+          } catch {
+            // ignore malformed chunk
+          }
+        }
+      }
+    } catch {
+      setMessages((prev) => [...prev, { role: 'assistant', content: ERROR_MSG }])
+    } finally {
+      setIsTyping(false)
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -138,7 +201,6 @@ export function AIAssistantInterface() {
               Ask Me Anything
             </h2>
             <p className="text-gray-500 max-w-md text-sm sm:text-base">
-              {/* [DRAFT — user to review] */}
               Questions about making money online? Ask below. I'm trained on the Cash Dollars Online
               content library — real answers, no hype.
             </p>
@@ -185,150 +247,165 @@ export function AIAssistantInterface() {
           </div>
         )}
 
-        {/* Input box */}
-        <div className="w-full bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4">
-          <div className="p-4">
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Ask about affiliate marketing, digital products, or income strategies..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full text-gray-700 text-base outline-none placeholder:text-gray-400"
-            />
+        {/* Rate limit CTA — shown after 5 messages */}
+        {showRateLimitCTA ? (
+          <div className="w-full bg-white border border-gray-200 rounded-xl shadow-sm p-6 text-center mb-4">
+            <div className="text-3xl mb-3">🔒</div>
+            <h3 className="font-semibold text-gray-900 mb-2">
+              You've used your 5 free questions
+            </h3>
+            <p className="text-sm text-gray-500 mb-4 max-w-sm mx-auto">
+              Join our newsletter for unlimited access to CDO AI and members-only content.
+            </p>
+            <LeadMagnetDialog />
           </div>
+        ) : (
+          <>
+            {/* Input box */}
+            <div className="w-full bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden mb-4">
+              <div className="p-4">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Ask about affiliate marketing, digital products, or income strategies..."
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="w-full text-gray-700 text-base outline-none placeholder:text-gray-400"
+                />
+              </div>
 
-          {/* Uploaded files */}
-          {uploadedFiles.length > 0 && (
-            <div className="px-4 pb-3 flex flex-wrap gap-2">
-              {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-2 bg-gray-50 py-1 px-2 rounded-md border border-gray-200">
-                  <FileText className="w-3 h-3" style={{ color: '#2E7D32' }} />
-                  <span className="text-xs text-gray-700">{file}</span>
+              {/* Uploaded files */}
+              {uploadedFiles.length > 0 && (
+                <div className="px-4 pb-3 flex flex-wrap gap-2">
+                  {uploadedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center gap-2 bg-gray-50 py-1 px-2 rounded-md border border-gray-200">
+                      <FileText className="w-3 h-3" style={{ color: '#2E7D32' }} />
+                      <span className="text-xs text-gray-700">{file}</span>
+                      <button
+                        onClick={() => setUploadedFiles((prev) => prev.filter((_, i) => i !== index))}
+                        className="text-gray-400 hover:text-gray-600"
+                        aria-label="Remove file"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Bottom toolbar */}
+              <div className="px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                    <Sparkles className="w-3 h-3" />
+                    <span>CDO AI</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setUploadedFiles((prev) => prev.filter((_, i) => i !== index))}
-                    className="text-gray-400 hover:text-gray-600"
-                    aria-label="Remove file"
+                    onClick={handleUploadFile}
+                    className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label="Upload file"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
+                    {showUploadAnimation ? (
+                      <motion.div className="flex space-x-0.5"
+                        initial="hidden" animate="visible"
+                        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+                      >
+                        {[0, 1, 2].map((i) => (
+                          <motion.div key={i} className="w-1.5 h-1.5 rounded-full"
+                            style={{ backgroundColor: '#2E7D32' }}
+                            variants={{ hidden: { opacity: 0, y: 5 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4, repeat: Infinity, repeatType: 'mirror', delay: i * 0.1 } } }}
+                          />
+                        ))}
+                      </motion.div>
+                    ) : (
+                      <Plus className="w-4 h-4" />
+                    )}
+                  </button>
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!inputValue.trim() || isTyping}
+                    className="w-8 h-8 flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed"
+                    style={{
+                      backgroundColor: inputValue.trim() && !isTyping ? '#2E7D32' : '#e5e7eb',
+                      color: inputValue.trim() && !isTyping ? 'white' : '#9ca3af',
+                    }}
+                    aria-label="Send message"
+                  >
+                    <ArrowUp className="w-4 h-4" />
                   </button>
                 </div>
-              ))}
-            </div>
-          )}
-
-          {/* Bottom toolbar */}
-          <div className="px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {/* Sparkles = AI indicator */}
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
-                <Sparkles className="w-3 h-3" />
-                <span>CDO AI</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleUploadFile}
-                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                aria-label="Upload file"
-              >
-                {showUploadAnimation ? (
-                  <motion.div className="flex space-x-0.5"
-                    initial="hidden" animate="visible"
-                    variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-                  >
-                    {[0, 1, 2].map((i) => (
-                      <motion.div key={i} className="w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: '#2E7D32' }}
-                        variants={{ hidden: { opacity: 0, y: 5 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4, repeat: Infinity, repeatType: 'mirror', delay: i * 0.1 } } }}
-                      />
-                    ))}
-                  </motion.div>
-                ) : (
-                  <Plus className="w-4 h-4" />
-                )}
-              </button>
-              <button
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim()}
-                className="w-8 h-8 flex items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed"
-                style={{
-                  backgroundColor: inputValue.trim() ? '#2E7D32' : '#e5e7eb',
-                  color: inputValue.trim() ? 'white' : '#9ca3af',
-                }}
-                aria-label="Send message"
-              >
-                <ArrowUp className="w-4 h-4" />
-              </button>
+
+            {/* Category buttons */}
+            <div className="w-full grid grid-cols-3 gap-3 mb-4">
+              <CommandButton
+                icon={<TrendingUp className="w-5 h-5" />}
+                label="Income Ideas"
+                isActive={activeCommandCategory === 'income'}
+                onClick={() => setActiveCommandCategory(activeCommandCategory === 'income' ? null : 'income')}
+              />
+              <CommandButton
+                icon={<ShoppingBag className="w-5 h-5" />}
+                label="Affiliate"
+                isActive={activeCommandCategory === 'affiliate'}
+                onClick={() => setActiveCommandCategory(activeCommandCategory === 'affiliate' ? null : 'affiliate')}
+              />
+              <CommandButton
+                icon={<Video className="w-5 h-5" />}
+                label="Digital Products"
+                isActive={activeCommandCategory === 'digital'}
+                onClick={() => setActiveCommandCategory(activeCommandCategory === 'digital' ? null : 'digital')}
+              />
             </div>
-          </div>
-        </div>
 
-        {/* Category buttons */}
-        <div className="w-full grid grid-cols-3 gap-3 mb-4">
-          <CommandButton
-            icon={<TrendingUp className="w-5 h-5" />}
-            label="Income Ideas"
-            isActive={activeCommandCategory === 'income'}
-            onClick={() => setActiveCommandCategory(activeCommandCategory === 'income' ? null : 'income')}
-          />
-          <CommandButton
-            icon={<ShoppingBag className="w-5 h-5" />}
-            label="Affiliate"
-            isActive={activeCommandCategory === 'affiliate'}
-            onClick={() => setActiveCommandCategory(activeCommandCategory === 'affiliate' ? null : 'affiliate')}
-          />
-          <CommandButton
-            icon={<Video className="w-5 h-5" />}
-            label="Digital Products"
-            isActive={activeCommandCategory === 'digital'}
-            onClick={() => setActiveCommandCategory(activeCommandCategory === 'digital' ? null : 'digital')}
-          />
-        </div>
-
-        {/* Suggestion list */}
-        <AnimatePresence>
-          {activeCommandCategory && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="w-full mb-6 overflow-hidden"
-            >
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                <div className="p-3 border-b border-gray-100">
-                  <h3 className="text-sm font-medium text-gray-700">
-                    {activeCommandCategory === 'income'
-                      ? 'Income strategy questions'
-                      : activeCommandCategory === 'affiliate'
-                      ? 'Affiliate marketing questions'
-                      : 'Digital product questions'}
-                  </h3>
-                </div>
-                <ul className="divide-y divide-gray-100">
-                  {commandSuggestions[activeCommandCategory].map((suggestion, index) => (
-                    <motion.li
-                      key={index}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: index * 0.03 }}
-                      onClick={() => handleCommandSelect(suggestion)}
-                      className="p-3 hover:bg-gray-50 cursor-pointer transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Search className="w-4 h-4 flex-shrink-0" style={{ color: '#2E7D32' }} />
-                        <span className="text-sm text-gray-700">{suggestion}</span>
-                      </div>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            {/* Suggestion list */}
+            <AnimatePresence>
+              {activeCommandCategory && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="w-full mb-6 overflow-hidden"
+                >
+                  <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <div className="p-3 border-b border-gray-100">
+                      <h3 className="text-sm font-medium text-gray-700">
+                        {activeCommandCategory === 'income'
+                          ? 'Income strategy questions'
+                          : activeCommandCategory === 'affiliate'
+                          ? 'Affiliate marketing questions'
+                          : 'Digital product questions'}
+                      </h3>
+                    </div>
+                    <ul className="divide-y divide-gray-100">
+                      {commandSuggestions[activeCommandCategory].map((suggestion, index) => (
+                        <motion.li
+                          key={index}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: index * 0.03 }}
+                          onClick={() => handleCommandSelect(suggestion)}
+                          className="p-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Search className="w-4 h-4 flex-shrink-0" style={{ color: '#2E7D32' }} />
+                            <span className="text-sm text-gray-700">{suggestion}</span>
+                          </div>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </>
+        )}
 
         <p className="text-xs text-gray-400 text-center mt-2">
           AI responses are for educational purposes only. Not financial advice.{' '}
