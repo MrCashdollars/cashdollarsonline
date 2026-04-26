@@ -90,48 +90,59 @@ export const WordsPullUpMultiStyle = ({ segments, className = '', style }: Words
 /* ── Hero ────────────────────────────────────────────────────────────── */
 const PrismaHero = () => {
   return (
-    // h-[calc(100vh-4rem)]: subtract the 64px (4rem) global sticky nav so the hero
-    // fills exactly the visible viewport below it.
+    // h-[calc(100vh-4rem)]: subtract the 64px (4rem) sticky nav height
     <section className="w-full" style={{ height: 'calc(100vh - 4rem)' }}>
       <div className="relative h-full w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
 
-        {/* Brand gradient background — replaces autoplay video (CLAUDE.md §7) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1B5E20] via-[#2E7D32] to-[#1a2e1a]" />
+        {/* ── Background: diagonal green/yellow split with $ pattern ── */}
+        {/* Yellow base — fills right portion */}
+        <div className="absolute inset-0" style={{ backgroundColor: '#FBC02D' }} />
 
-        {/* Noise texture overlay */}
-        <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.4] mix-blend-overlay" />
+        {/* Green left portion, clipped diagonally */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundColor: '#1B5E20',
+            clipPath: 'polygon(0 0, 58% 0, 40% 100%, 0 100%)',
+          }}
+        />
 
-        {/* Vignette for text legibility */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70" />
+        {/* Repeating $ sign texture over entire background */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Ctext x='8' y='36' font-family='serif' font-size='26' font-weight='bold' fill='%23000' fill-opacity='0.07'%3E%24%3C/text%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat',
+          }}
+        />
 
-        {/* Hero content */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-2 sm:px-6 md:px-10">
-          <div className="grid grid-cols-12 items-end gap-4">
+        {/* Hero content — vertically centered */}
+        <div className="absolute inset-0 flex items-center px-4 sm:px-6 md:px-10">
+          <div className="grid grid-cols-12 items-center gap-6 w-full">
 
-            {/* Large tagline text */}
-            <div className="col-span-12 lg:col-span-8">
+            {/* Large tagline text — left column (on green) */}
+            <div className="col-span-12 lg:col-span-7">
               <h1
-                className="font-bold leading-[0.85] tracking-[-0.05em] text-[14vw] sm:text-[12vw] md:text-[11vw] lg:text-[10vw]"
+                className="font-bold leading-[0.85] tracking-[-0.05em] text-[14vw] sm:text-[12vw] md:text-[11vw] lg:text-[9vw]"
                 style={{ color: '#E1E0CC' }}
               >
                 <WordsPullUp text="Cash Dollars" />
                 <br />
                 <WordsPullUp
                   text="Online"
-                  className="text-brand-yellow-700"
                   style={{ color: '#FBC02D' }}
                 />
               </h1>
             </div>
 
-            {/* Value prop + CTAs */}
-            <div className="col-span-12 flex flex-col gap-5 pb-6 lg:col-span-4 lg:pb-10">
+            {/* Value prop + CTAs — right column (on yellow, dark text for contrast) */}
+            <div className="col-span-12 flex flex-col gap-5 lg:col-span-5">
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="text-xs sm:text-sm md:text-base"
-                style={{ color: 'rgba(225, 224, 204, 0.85)', lineHeight: 1.4 }}
+                className="text-sm md:text-base font-medium"
+                style={{ color: '#1B5E20', lineHeight: 1.5 }}
               >
                 {/* [DRAFT — user to review] */}
                 We don't sell dreams. We provide roadmaps. Practical, honest strategies for building
@@ -144,12 +155,15 @@ const PrismaHero = () => {
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className="group inline-flex items-center gap-2 self-start rounded-full py-1 pl-5 pr-1 text-sm font-semibold text-black transition-all hover:gap-3 sm:text-base no-underline"
-                  style={{ backgroundColor: '#FBC02D' }}
+                  className="group inline-flex items-center gap-2 self-start rounded-full py-1 pl-5 pr-1 text-sm font-semibold transition-all hover:gap-3 sm:text-base no-underline"
+                  style={{ backgroundColor: '#1B5E20', color: '#FBC02D' }}
                 >
                   Get the Free Guide
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black transition-transform group-hover:scale-110 sm:h-10 sm:w-10">
-                    <ArrowRight className="h-4 w-4" style={{ color: '#FBC02D' }} />
+                  <span
+                    className="flex h-9 w-9 items-center justify-center rounded-full transition-transform group-hover:scale-110 sm:h-10 sm:w-10"
+                    style={{ backgroundColor: '#FBC02D' }}
+                  >
+                    <ArrowRight className="h-4 w-4" style={{ color: '#1B5E20' }} />
                   </span>
                 </motion.a>
 
@@ -160,10 +174,10 @@ const PrismaHero = () => {
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.85, ease: [0.16, 1, 0.3, 1] }}
-                  className="self-start text-sm sm:text-base no-underline transition-colors"
-                  style={{ color: 'rgba(225, 224, 204, 0.7)' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#E1E0CC')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(225, 224, 204, 0.7)')}
+                  className="self-start text-sm sm:text-base no-underline transition-colors font-semibold"
+                  style={{ color: 'rgba(27, 94, 32, 0.75)' }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#1B5E20')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(27, 94, 32, 0.75)')}
                 >
                   Watch on YouTube →
                 </motion.a>
@@ -175,7 +189,7 @@ const PrismaHero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 1.1 }}
                 className="text-[10px]"
-                style={{ color: 'rgba(225, 224, 204, 0.45)' }}
+                style={{ color: 'rgba(27, 94, 32, 0.5)' }}
               >
                 * Results vary. Most people see their first $100 in 3–6 months with consistent effort.
               </motion.p>

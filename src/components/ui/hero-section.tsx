@@ -155,12 +155,24 @@ function HeroSection() {
               className="transition-all aspect-video rounded-xl backdrop-blur-sm overflow-hidden relative block no-underline group"
             >
               <figure className="relative h-full w-full">
-                <img
-                  src={category.imgSrc}
-                  alt={category.name}
-                  className={cn('w-full h-full', category.imgClass, 'group-hover:scale-105 transition-transform duration-500')}
-                  loading="lazy"
-                />
+                {category.id === 'youtube-strategy' ? (
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ backgroundColor: '#FF0000' }}
+                  >
+                    {/* YouTube official logo SVG */}
+                    <svg viewBox="0 0 90 63" className="w-20 h-14" fill="white" aria-label="YouTube">
+                      <path d="M88.15 9.83A11.3 11.3 0 0 0 80.21 1.88C73.21 0 45 0 45 0S16.79 0 9.79 1.88A11.3 11.3 0 0 0 1.85 9.83C0 16.83 0 31.5 0 31.5s0 14.67 1.85 21.67A11.3 11.3 0 0 0 9.79 61.12C16.79 63 45 63 45 63s28.21 0 35.21-1.88a11.3 11.3 0 0 0 7.94-7.95C90 46.17 90 31.5 90 31.5s0-14.67-1.85-21.67zM35.8 45V18l23.6 13.5L35.8 45z"/>
+                    </svg>
+                  </div>
+                ) : (
+                  <img
+                    src={category.imgSrc}
+                    alt={category.name}
+                    className={cn('w-full h-full', category.imgClass, 'group-hover:scale-105 transition-transform duration-500')}
+                    loading="lazy"
+                  />
+                )}
               </figure>
               <ProgressiveBlur
                 className="pointer-events-none absolute bottom-0 left-0 h-[40%] w-full"
