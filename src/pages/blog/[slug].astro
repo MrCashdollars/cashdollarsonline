@@ -1,43 +1,29 @@
 ---
-// Individual blog post — /blog/[slug]
-// Required features per CLAUDE.md §5.4:
-//   - Clean reading layout
-//   - Related posts
-//   - Email CTA in-body and at end of post
-//   - Estimated read time + last-updated date
-//
-// Schema: Article (see CLAUDE.md §9)
-// Data: getPostBySlug(slug) from src/lib/wordpress.ts
+export const prerender = false
 
-import type { GetStaticPaths } from 'astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
-// import { getAllPosts, getPostBySlug } from '../../lib/wordpress'
-
-// TODO: uncomment when wordpress.ts is implemented
-export const getStaticPaths: GetStaticPaths = async () => {
-  // const posts = await getAllPosts()
-  // return posts.map((post) => ({
-  //   params: { slug: post.slug },
-  //   props: { post },
-  // }))
-
-  // Placeholder — remove once lib is wired
-  return []
-}
+import { getPostBySlug } from '../../lib/wordpress'
 
 const { slug } = Astro.params
-// TODO: const { post } = Astro.props
+const post = await getPostBySlug(slug as string)
+
+if (!post) {
+  return Astro.redirect('/blog', 302)
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric',
+  })
+}
 
 const schemaArticle = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: '[post.title]',
-  datePublished: '[post.date]',
-  dateModified: '[post.modified]',
-  author: {
-    '@type': 'Person',
-    name: '[VERIFY: founder name]',
-  },
+  headline: post.title,
+  datePublished: post.date,
+  dateModified: post.modified,
+  author: { '@type': 'Person', name: 'Mr Cash Dollars' },
   publisher: {
     '@type': 'Organization',
     name: 'Cash Dollars Online',
@@ -47,36 +33,128 @@ const schemaArticle = JSON.stringify({
 ---
 
 <BaseLayout
-  title="[Post Title]"
-  description="[Post excerpt]"
+  title={`${post.title} — Cash Dollars Online`}
+  description={post.excerpt.slice(0, 160)}
   schemaJson={schemaArticle}
 >
-  <article class="container-content section-padding">
-    <header class="mb-12">
-      <h1 class="text-3xl font-bold mb-4">[Post title — loading from WordPress]</h1>
-      <div class="flex gap-4 text-sm text-gray-500">
-        <span>[Date]</span>
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+
+    <a
+      href="/blog"
+      class="inline-flex items-center gap-1 text-sm font-medium no-underline mb-10 transition-opacity hover:opacity-70"
+      style="color:#2E7D32"
+    >
+      ← Back to Blog
+    </a>
+
+    <header class="mb-10">
+      {post.categories.length > 0 && (
+        <span class="text-xs font-semibold uppercase tracking-widest" style="color:#2E7D32">
+          {post.categories[0]}
+        </span>
+      )}
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mt-2 mb-4 leading-tight">
+        {post.title}
+      </h1>
+      <div class="flex flex-wrap items-center gap-2 text-sm text-gray-400">
+        <span>{formatDate(post.date)}</span>
         <span>·</span>
-        <span>[X min read]</span>
-        <span>·</span>
-        <span>Updated [date]</span>
+        <span>{post.readingTimeMinutes} min read</span>
+        {post.date !== post.modified && (
+          <>
+            <span>·</span>
+            <span>Updated {formatDate(post.modified)}</span>
+          </>
+        )}
       </div>
     </header>
 
-    <!-- TODO: post body — rendered from WordPress HTML or converted to MDX -->
-    <div class="prose prose-gray max-w-none mb-12">
-      <p class="text-gray-400">[Post content — loading from WordPress slug: {slug}]</p>
-    </div>
+    {post.featuredImageUrl && (
+      <img
+        src={post.featuredImageUrl}
+        alt={post.title}
+        class="w-full rounded-2xl mb-10 shadow-sm"
+        loading="eager"
+      />
+    )}
 
-    <!-- In-body email CTA -->
-    <div class="bg-brand-green-50 border border-brand-green-200 rounded-xl p-6 my-12">
-      <h3 class="font-semibold text-lg mb-2">Get the free guide</h3>
-      <p class="text-gray-600 text-sm mb-4">
-        [DRAFT] Practical roadmap for your first $100 online.
+    <!-- WordPress post HTML rendered here -->
+    <div class="wp-content text-gray-800 text-base leading-relaxed" set:html={post.content} />
+
+    <!-- Email CTA — required per CLAUDE.md §5.4 -->
+    <div
+      class="my-12 p-6 rounded-2xl border-2"
+      style="border-color:#2E7D32;background:#f0fdf4"
+    >
+      <h3 class="text-lg font-bold text-gray-900 mb-1">Get the Free Starter Guide</h3>
+      <p class="text-sm text-gray-600 mb-4">
+        A practical roadmap for your first $100 online. Most people hit it in 3–6 months with
+        consistent effort.
       </p>
-      <!-- TODO: SendFox embed or form component -->
+      <a
+        href="/free-guides"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold no-underline transition-opacity hover:opacity-90"
+        style="background-color:#2E7D32;color:white"
+      >
+        Download Free →
+      </a>
     </div>
 
-    <!-- TODO: related posts section -->
+    <footer class="border-t border-gray-100 pt-8">
+      <a
+        href="/blog"
+        class="text-sm font-semibold no-underline"
+        style="color:#2E7D32"
+      >
+        ← Back to all articles
+      </a>
+    </footer>
+
   </article>
 </BaseLayout>
+
+<style>
+  /* Styles for WordPress-rendered post HTML */
+  .wp-content :global(h1),
+  .wp-content :global(h2),
+  .wp-content :global(h3),
+  .wp-content :global(h4) {
+    font-weight: 700;
+    color: #111827;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+  .wp-content :global(h2) { font-size: 1.5rem; }
+  .wp-content :global(h3) { font-size: 1.25rem; }
+  .wp-content :global(p) { margin: 1rem 0; line-height: 1.75; }
+  .wp-content :global(a) { color: #2E7D32; text-decoration: underline; }
+  .wp-content :global(a:hover) { opacity: 0.8; }
+  .wp-content :global(ul) { list-style: disc; margin: 1rem 0; padding-left: 1.5rem; }
+  .wp-content :global(ol) { list-style: decimal; margin: 1rem 0; padding-left: 1.5rem; }
+  .wp-content :global(li) { margin: 0.5rem 0; line-height: 1.7; }
+  .wp-content :global(img) { max-width: 100%; border-radius: 0.75rem; margin: 1.5rem 0; }
+  .wp-content :global(blockquote) {
+    border-left: 4px solid #2E7D32;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    color: #4b5563;
+    font-style: italic;
+  }
+  .wp-content :global(pre) {
+    background: #f3f4f6;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+  .wp-content :global(code) {
+    background: #f3f4f6;
+    padding: 0.15em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+  .wp-content :global(strong) { font-weight: 700; }
+  .wp-content :global(em) { font-style: italic; }
+  .wp-content :global(hr) { border: none; border-top: 1px solid #e5e7eb; margin: 2rem 0; }
+</style>

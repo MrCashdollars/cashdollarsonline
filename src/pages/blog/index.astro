@@ -1,40 +1,128 @@
 ---
-// Blog index — /blog
-// Required features per CLAUDE.md §5.4:
-//   - Pulls from WordPress REST API (src/lib/wordpress.ts)
-//   - Pagination
-//   - Category filter
-//   - Estimated read time + last-updated date per post
-//
-// Data: getRecentPosts() / getAllPosts() from src/lib/wordpress.ts
-// Note: build-time fetch preferred for SEO + speed (see CLAUDE.md §4)
+export const prerender = false
 
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getAllPosts, getCategories } from '../../lib/wordpress'
 
-// TODO: uncomment when lib is implemented
-// import { getAllPosts } from '../../lib/wordpress'
-// const posts = await getAllPosts()
+const [posts, categories] = await Promise.all([getAllPosts(), getCategories()])
+
+const selectedCategory = Astro.url.searchParams.get('category') ?? ''
+
+const filteredPosts = selectedCategory
+  ? posts.filter(p =>
+      p.categories.some(c => c.toLowerCase() === selectedCategory.toLowerCase())
+    )
+  : posts
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-US', {
+    month: 'long', day: 'numeric', year: 'numeric',
+  })
+}
 ---
 
 <BaseLayout
-  title="Blog"
-  description="[DRAFT] Practical guides on building supplemental income online. Affiliate marketing, digital products, and content monetization — no fluff."
+  title="Blog — Cash Dollars Online"
+  description="Honest, practical articles on building supplemental income online. Affiliate marketing, digital products, and content monetization — no fluff."
 >
-  <div class="container-wide section-padding">
-    <h1 class="text-3xl font-bold mb-4">Blog</h1>
-    <p class="text-gray-600 mb-12">
-      [DRAFT] Real strategies for building income online. No hype — just what actually works, how
-      long it takes, and what it costs.
-    </p>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
-    <!-- TODO: category filter tabs -->
-    <!-- TODO: post grid — pulls from WordPress REST API -->
-    <!-- TODO: pagination controls -->
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <p class="text-gray-400 col-span-full text-center py-12">
-        [Blog posts will load from WordPress — lib/wordpress.ts to be implemented]
+    <header class="mb-12 text-center max-w-2xl mx-auto">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">From the Blog</h1>
+      <p class="text-lg text-gray-600">
+        Honest, practical guides on building supplemental income. No fluff, no recycled advice.
       </p>
-    </div>
+    </header>
+
+    {categories.length > 0 && (
+      <div class="flex flex-wrap gap-2 justify-center mb-12">
+        <a
+          href="/blog"
+          class:list={[
+            'px-4 py-2 rounded-full text-sm font-medium transition-colors no-underline',
+            !selectedCategory
+              ? 'text-white'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+          ]}
+          style={!selectedCategory ? 'background-color:#2E7D32' : ''}
+        >
+          All
+        </a>
+        {categories.map(cat => (
+          <a
+            href={`/blog?category=${encodeURIComponent(cat.name)}`}
+            class:list={[
+              'px-4 py-2 rounded-full text-sm font-medium transition-colors no-underline',
+              selectedCategory.toLowerCase() === cat.name.toLowerCase()
+                ? 'text-white'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
+            ]}
+            style={selectedCategory.toLowerCase() === cat.name.toLowerCase() ? 'background-color:#2E7D32' : ''}
+          >
+            {cat.name}
+          </a>
+        ))}
+      </div>
+    )}
+
+    {filteredPosts.length === 0 ? (
+      <p class="text-center text-gray-400 py-20">
+        {posts.length === 0
+          ? 'No posts yet — check back soon.'
+          : 'No posts in this category yet.'}
+      </p>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filteredPosts.map(post => (
+          <a
+            href={`/blog/${post.slug}`}
+            class="group block no-underline rounded-2xl overflow-hidden border border-gray-100 hover:shadow-md transition-shadow bg-white"
+          >
+            {post.featuredImageUrl ? (
+              <img
+                src={post.featuredImageUrl}
+                alt={post.title}
+                class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            ) : (
+              <div
+                class="w-full aspect-video flex items-center justify-center"
+                style="background:linear-gradient(135deg,#f0fdf4,#fefce8)"
+              >
+                <span class="text-5xl font-black opacity-20" style="color:#2E7D32">$</span>
+              </div>
+            )}
+
+            <div class="p-5">
+              {post.categories.length > 0 && (
+                <span
+                  class="text-xs font-semibold uppercase tracking-wide"
+                  style="color:#2E7D32"
+                >
+                  {post.categories[0]}
+                </span>
+              )}
+              <h2 class="text-base font-bold text-gray-900 mt-1 mb-2 leading-snug group-hover:text-green-800 transition-colors">
+                {post.title}
+              </h2>
+              {post.excerpt && (
+                <p class="text-sm text-gray-500 mb-3">
+                  {post.excerpt.length > 120
+                    ? post.excerpt.slice(0, 120) + '…'
+                    : post.excerpt}
+                </p>
+              )}
+              <div class="flex items-center gap-2 text-xs text-gray-400">
+                <span>{formatDate(post.date)}</span>
+                <span>·</span>
+                <span>{post.readingTimeMinutes} min read</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+
   </div>
 </BaseLayout>
