@@ -8,9 +8,9 @@ const configPath = resolve('.vercel/output/functions/_render.func/.vc-config.jso
 try {
   const config = JSON.parse(readFileSync(configPath, 'utf8'))
   const before = config.runtime
-  config.runtime = 'nodejs20.x'
+  config.runtime = 'nodejs22.x'
   writeFileSync(configPath, JSON.stringify(config, null, '\t'))
-  console.log(`✓ Patched Vercel runtime: ${before} → nodejs20.x`)
+  console.log(`✓ Patched Vercel runtime: ${before} → nodejs22.x`)
 } catch (err) {
   console.error('patch-vercel-runtime: failed —', err.message)
   process.exit(1)
