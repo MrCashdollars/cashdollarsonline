@@ -73,6 +73,7 @@ export function AIAssistantInterface() {
   const [activeCommandCategory, setActiveCommandCategory] = useState<CategoryKey | null>(null)
   const [showRateLimitCTA, setShowRateLimitCTA] = useState(() => getSessionCount() >= MSG_LIMIT)
   const inputRef = useRef<HTMLInputElement>(null)
+  const isSendingRef = useRef(false)
 
   const handleUploadFile = () => {
     setShowUploadAnimation(true)
@@ -89,7 +90,8 @@ export function AIAssistantInterface() {
   }
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || showRateLimitCTA) return
+    if (!inputValue.trim() || showRateLimitCTA || isSendingRef.current) return
+    isSendingRef.current = true
 
     if (getSessionCount() >= MSG_LIMIT) {
       setShowRateLimitCTA(true)
@@ -102,6 +104,8 @@ export function AIAssistantInterface() {
     setMessages((prev) => [...prev, { role: 'user', content: userMessage }])
     setIsTyping(true)
 
+    let reader: ReadableStreamDefaultReader<Uint8Array> | undefined
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -111,7 +115,7 @@ export function AIAssistantInterface() {
 
       if (!response.ok || !response.body) throw new Error('Request failed')
 
-      const reader = response.body.getReader()
+      reader = response.body.getReader()
       const decoder = new TextDecoder()
       let assistantAdded = false
       let finished = false
@@ -138,7 +142,6 @@ export function AIAssistantInterface() {
             const parsed = JSON.parse(data) as { token?: string; error?: string }
 
             if (parsed.error) {
-              setIsTyping(false)
               setMessages((prev) => [...prev, { role: 'assistant', content: ERROR_MSG }])
               finished = true
               break
@@ -169,6 +172,8 @@ export function AIAssistantInterface() {
       setMessages((prev) => [...prev, { role: 'assistant', content: ERROR_MSG }])
     } finally {
       setIsTyping(false)
+      isSendingRef.current = false
+      reader?.releaseLock()
     }
   }
 
@@ -209,7 +214,7 @@ export function AIAssistantInterface() {
 
         {/* Chat history */}
         {messages.length > 0 && (
-          <div className="w-full mb-4 space-y-3 max-h-72 overflow-y-auto">
+          <div className="w-full mb-4 space-y-3 max-h-72 overflow-y-auto" role="log" aria-live="polite" aria-label="Chat messages">
             {messages.map((msg, i) => (
               <div
                 key={i}
