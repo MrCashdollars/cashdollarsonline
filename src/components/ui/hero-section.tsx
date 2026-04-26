@@ -94,7 +94,7 @@ function HeroSection() {
           <TimelineContent
             as="a"
             href="/free-guides"
-            animationNum={2}
+            animationNum={1}
             timelineRef={timelineRef}
             customVariants={revealVariants}
             className="flex w-fit mx-auto items-center gap-1 rounded-full bg-brand-green-800 border-4 border-brand-green-100 py-0.5 pl-0.5 pr-3 text-xs no-underline"
@@ -114,7 +114,7 @@ function HeroSection() {
           {/* Headline */}
           <TimelineContent
             as="h2"
-            animationNum={3}
+            animationNum={2}
             timelineRef={timelineRef}
             customVariants={revealVariants}
             className="text-5xl sm:text-6xl font-bold text-gray-900 leading-[100%] tracking-tight"
@@ -132,7 +132,7 @@ function HeroSection() {
           {/* Subtitle */}
           <TimelineContent
             as="p"
-            animationNum={4}
+            animationNum={3}
             timelineRef={timelineRef}
             customVariants={revealVariants}
             className="text-xl text-gray-600 max-w-2xl mx-auto"
@@ -149,7 +149,7 @@ function HeroSection() {
             <TimelineContent
               key={category.id}
               as="a"
-              animationNum={index + 5}
+              animationNum={index + 4}
               timelineRef={timelineRef}
               href={category.href}
               className="transition-all aspect-video rounded-xl backdrop-blur-sm overflow-hidden relative block no-underline group"

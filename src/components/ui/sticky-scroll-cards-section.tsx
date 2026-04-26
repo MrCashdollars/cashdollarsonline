@@ -14,7 +14,7 @@ const features = [
       'Recommend products and tools you actually use. When someone buys through your link, you earn a commission. No inventory, no customer service. Takes 3–6 months to see consistent income — but it compounds.',
     imageUrl:
       'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop',
-    bgColor: 'bg-yellow-100 dark:bg-yellow-900',
+    bgColor: 'bg-[#E8F5E9]',   // brand green-50 — money/growth theme
     textColor: 'text-gray-700',
   },
   {
@@ -23,7 +23,7 @@ const features = [
       'Create an ebook, template, or mini-course once — then sell it as many times as you want. The work is upfront; the sales can continue for years. Best for people with a specific skill or knowledge to share.',
     imageUrl:
       'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop',
-    bgColor: 'bg-amber-100 dark:bg-amber-900',
+    bgColor: 'bg-[#FFFDE7]',   // brand yellow-50 — creativity/product theme
     textColor: 'text-gray-700',
   },
   {
@@ -32,7 +32,7 @@ const features = [
       'Build an audience on YouTube, a blog, or a newsletter — then monetize through ads, sponsorships, or affiliate links. Takes the most time to ramp up (6–12 months minimum) but creates the most durable long-term income.',
     imageUrl:
       'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2074&auto=format&fit=crop',
-    bgColor: 'bg-orange-100 dark:bg-orange-900',
+    bgColor: 'bg-slate-100',   // neutral — broad audience/content theme
     textColor: 'text-gray-700',
   },
 ]
