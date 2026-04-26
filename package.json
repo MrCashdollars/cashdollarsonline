@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/patch-vercel-runtime.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
@@ -52,6 +52,6 @@
     "vitest": "^2.1.9"
   },
   "engines": {
-    "node": ">=18.17.1"
+    "node": ">=20.0.0"
   }
 }
