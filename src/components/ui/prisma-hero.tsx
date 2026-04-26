@@ -87,19 +87,12 @@ export const WordsPullUpMultiStyle = ({ segments, className = '', style }: Words
   )
 }
 
-/* ── CDO Navigation ──────────────────────────────���───────────────────── */
-const navItems = [
-  { label: 'Blog', href: '/blog' },
-  { label: 'Videos', href: '/videos' },
-  { label: 'Free Guides', href: '/free-guides' },
-  { label: 'Resources', href: '/resources' },
-  { label: 'Contact', href: '/contact' },
-]
-
 /* ── Hero ────────────────────────────────────────────────────────────── */
 const PrismaHero = () => {
   return (
-    <section className="h-screen w-full">
+    // h-[calc(100vh-4rem)]: subtract the 64px (4rem) global sticky nav so the hero
+    // fills exactly the visible viewport below it.
+    <section className="w-full" style={{ height: 'calc(100vh - 4rem)' }}>
       <div className="relative h-full w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
 
         {/* Brand gradient background — replaces autoplay video (CLAUDE.md §7) */}
@@ -110,24 +103,6 @@ const PrismaHero = () => {
 
         {/* Vignette for text legibility */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70" />
-
-        {/* Navbar */}
-        <nav className="absolute left-1/2 top-0 z-20 -translate-x-1/2">
-          <div className="flex items-center gap-3 rounded-b-2xl bg-black/80 backdrop-blur-sm px-4 py-2 sm:gap-6 md:gap-10 md:rounded-b-3xl md:px-8">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-[10px] transition-colors sm:text-xs md:text-sm no-underline"
-                style={{ color: 'rgba(225, 224, 204, 0.8)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#FBC02D')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(225, 224, 204, 0.8)')}
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        </nav>
 
         {/* Hero content */}
         <div className="absolute bottom-0 left-0 right-0 px-4 pb-2 sm:px-6 md:px-10">

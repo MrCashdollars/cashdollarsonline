@@ -4,6 +4,8 @@
 // TODO: import Nav and Footer components once built.
 
 import '../styles/global.css'
+import Nav from '../components/ui/nav.astro'
+import Footer from '../components/ui/footer.astro'
 
 interface Props {
   /** Page title — appears in <title> and OG tags */
@@ -79,7 +81,7 @@ const plausibleHost = import.meta.env.PLAUSIBLE_API_HOST ?? 'https://plausible.i
     <title>{fullTitle}</title>
   </head>
   <body class="min-h-screen flex flex-col bg-white text-gray-900">
-    <!-- TODO: <Nav /> — top navigation component -->
+    <Nav />
     <main class="flex-1">
       <!-- FTC income disclaimer — shown on pages with affiliate content -->
       {
@@ -95,6 +97,6 @@ const plausibleHost = import.meta.env.PLAUSIBLE_API_HOST ?? 'https://plausible.i
       }
       <slot />
     </main>
-    <!-- TODO: <Footer /> — footer with email signup, links, legal -->
+    <Footer />
   </body>
 </html>

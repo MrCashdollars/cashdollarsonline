@@ -1,0 +1,171 @@
+---
+// Site-wide footer — rendered by BaseLayout on every page.
+// Income disclaimer + affiliate disclosure required per CLAUDE.md §8 and §9.
+
+const year = new Date().getFullYear()
+
+const navigate = [
+  { href: '/',        label: 'Home' },
+  { href: '/about',   label: 'About' },
+  { href: '/blog',    label: 'Blog' },
+  { href: '/videos',  label: 'Videos' },
+  { href: '/contact', label: 'Contact' },
+]
+
+const resources = [
+  { href: '/free-guides', label: 'Free Guides' },
+  { href: '/resources',   label: 'Tools & Resources' },
+  { href: '/courses',     label: 'Courses (Coming Soon)' },
+]
+
+const legal = [
+  { href: '/privacy',    label: 'Privacy Policy' },
+  { href: '/terms',      label: 'Terms of Service' },
+  { href: '/disclaimer', label: 'Income Disclaimer' },
+  { href: '/cookies',    label: 'Cookie Policy' },
+]
+---
+
+<footer class="site-footer">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-10">
+
+    <!-- Top grid: brand column + 3 link columns -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10 mb-10 sm:mb-12">
+
+      <!-- Brand -->
+      <div class="col-span-2 sm:col-span-1">
+        <a href="/" class="brand-link inline-flex items-center gap-2.5 mb-4" aria-label="Cash Dollars Online – home">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:#FBC02D" aria-hidden="true">
+            <span class="font-black text-base leading-none select-none" style="color:#1B5E20">$</span>
+          </div>
+          <span class="font-bold text-sm leading-tight" style="color:white">Cash Dollars Online</span>
+        </a>
+        <!-- [DRAFT — user to review] -->
+        <p class="text-sm leading-relaxed footer-muted">
+          We don't sell dreams. We provide roadmaps. Honest strategies for building real supplemental income online.
+        </p>
+        <a
+          href="https://youtube.com/@cashdollarsonline2195"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-link inline-flex items-center gap-2 mt-4 text-xs"
+        >
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+          </svg>
+          @cashdollarsonline2195
+        </a>
+      </div>
+
+      <!-- Navigate -->
+      <div>
+        <h2 class="footer-heading text-xs font-semibold uppercase tracking-wider mb-4">Navigate</h2>
+        <ul class="space-y-2.5 list-none p-0 m-0">
+          {navigate.map(({ href, label }) => (
+            <li><a href={href} class="footer-link text-sm">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h2 class="footer-heading text-xs font-semibold uppercase tracking-wider mb-4">Resources</h2>
+        <ul class="space-y-2.5 list-none p-0 m-0">
+          {resources.map(({ href, label }) => (
+            <li><a href={href} class="footer-link text-sm">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h2 class="footer-heading text-xs font-semibold uppercase tracking-wider mb-4">Legal</h2>
+        <ul class="space-y-2.5 list-none p-0 m-0">
+          {legal.map(({ href, label }) => (
+            <li><a href={href} class="footer-link text-sm">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="footer-divider border-t pt-8">
+
+      <!-- Income disclaimer (required per CLAUDE.md §8) -->
+      <!-- [DRAFT — user to review] -->
+      <p class="text-xs leading-relaxed mb-5 max-w-3xl footer-disclaimer">
+        <strong class="footer-disclaimer-strong">Income Disclaimer:</strong>{' '}
+        Results mentioned on this site are not typical. Building supplemental income online requires consistent effort over months.
+        Most people see their first meaningful income in 3–12 months.
+        See our <a href="/disclaimer" class="footer-disclaimer-link underline">full income disclaimer</a>.
+        This site may contain affiliate links —
+        <a href="/disclaimer" class="footer-disclaimer-link underline">affiliate disclosure</a>.
+      </p>
+
+      <!-- Copyright row -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5">
+        <p class="text-xs footer-muted">© {year} Cash Dollars Online. All rights reserved.</p>
+        <p class="text-xs footer-muted">Built with honesty. No hype.</p>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: #1B5E20;
+  }
+
+  /* Muted body text */
+  .footer-muted {
+    color: rgba(187, 247, 208, 0.75);
+  }
+
+  /* Section headings */
+  .footer-heading {
+    color: rgba(134, 239, 172, 0.85);
+  }
+
+  /* Links */
+  .footer-link {
+    color: rgba(187, 247, 208, 0.75);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer-link:hover {
+    color: white;
+    text-decoration: none;
+  }
+
+  /* Brand wordmark link */
+  .brand-link {
+    text-decoration: none !important;
+    color: inherit;
+  }
+  .brand-link:hover {
+    color: inherit;
+    opacity: 0.9;
+  }
+
+  /* Divider */
+  .footer-divider {
+    border-color: rgba(21, 128, 61, 0.5);
+  }
+
+  /* Disclaimer text */
+  .footer-disclaimer {
+    color: rgba(134, 239, 172, 0.65);
+  }
+  .footer-disclaimer-strong {
+    color: rgba(134, 239, 172, 0.85);
+    font-weight: 600;
+  }
+  .footer-disclaimer-link {
+    color: rgba(134, 239, 172, 0.85);
+    transition: color 0.15s;
+  }
+  .footer-disclaimer-link:hover {
+    color: white;
+  }
+</style>

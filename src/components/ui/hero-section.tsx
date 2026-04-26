@@ -86,36 +86,6 @@ function HeroSection() {
 
   return (
     <main ref={timelineRef} className="bg-white">
-      {/* ── Top bar ───────────────────────────���────────────────────── */}
-      <TimelineContent
-        as="header"
-        animationNum={1}
-        timelineRef={timelineRef}
-        className="w-full top-0 left-0 z-10 relative md:px-0 px-2 border-b border-gray-100"
-      >
-        <div className="max-w-5xl p-2 px-4 h-full relative mx-auto flex justify-between items-center">
-          {/* CDO wordmark */}
-          <a href="/" className="flex items-center gap-2 no-underline" aria-label="Cash Dollars Online home">
-            <span className="font-bold text-lg text-brand-green-800 tracking-tight">
-              Cash Dollars Online
-            </span>
-          </a>
-
-          {/* YouTube link */}
-          <a
-            href="https://youtube.com/@cashdollarsonline2195"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-brand-green-800 no-underline transition-colors"
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current text-red-600" aria-hidden="true">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-            </svg>
-            <span className="hidden sm:inline">Watch on YouTube</span>
-          </a>
-        </div>
-      </TimelineContent>
-
       {/* ── Main content ───────────────────────────────────────────── */}
       <div className="pt-16 pb-8 max-w-screen-xl mx-auto min-h-[80vh] px-4">
         <article className="w-fit mx-auto max-w-3xl text-center space-y-6">
