@@ -91,8 +91,8 @@ export const WordsPullUpMultiStyle = ({ segments, className = '', style }: Words
 const PrismaHero = () => {
   return (
     // h-[calc(100vh-4rem)]: subtract the 64px (4rem) sticky nav height
-    <section className="w-full" style={{ height: 'calc(100vh - 4rem)' }}>
-      <div className="relative h-full w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
+    <section className="w-full py-20 sm:py-28">
+      <div className="relative w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
 
         {/* ── Background: diagonal green/yellow split with $ pattern ── */}
         {/* Yellow base — fills right portion */}
