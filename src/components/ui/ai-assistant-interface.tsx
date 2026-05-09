@@ -191,6 +191,8 @@ export function AIAssistantInterface() {
         <img
           src="/logo.png"
           alt="Cash Dollars Online"
+          width="64"
+          height="64"
           className="mb-6 w-16 h-16 rounded-full object-cover"
         />
 
