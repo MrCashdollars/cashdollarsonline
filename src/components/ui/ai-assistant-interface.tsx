@@ -10,7 +10,6 @@ import {
   TrendingUp,
   ShoppingBag,
   Video,
-  DollarSign,
   Sparkles,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -188,11 +187,12 @@ export function AIAssistantInterface() {
     <div className="w-full bg-white py-16 px-4">
       <div className="w-full max-w-3xl mx-auto flex flex-col items-center">
 
-        {/* CDO coin icon */}
-        <div className="mb-6 w-16 h-16 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: '#2E7D32' }}>
-          <DollarSign className="w-8 h-8 text-white" />
-        </div>
+        {/* CDO logo */}
+        <img
+          src="/logo.png"
+          alt="Cash Dollars Online"
+          className="mb-6 w-16 h-16 rounded-full object-cover"
+        />
 
         {/* Heading */}
         <div className="mb-8 text-center">
