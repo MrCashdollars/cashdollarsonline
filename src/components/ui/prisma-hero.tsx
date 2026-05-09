@@ -116,7 +116,7 @@ const PrismaHero = () => {
         />
 
         {/* Hero content — shifted toward top */}
-        <div className="absolute inset-0 flex items-start pt-10 sm:pt-14 px-4 sm:px-6 md:px-10">
+        <div className="absolute inset-0 flex items-start pt-4 sm:pt-6 px-4 sm:px-6 md:px-10">
           <div className="grid grid-cols-12 items-center gap-6 w-full">
 
             {/* Large tagline text — left column (on green) */}
