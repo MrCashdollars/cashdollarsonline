@@ -90,8 +90,8 @@ export const WordsPullUpMultiStyle = ({ segments, className = '', style }: Words
 /* ── Hero ────────────────────────────────────────────────────────────── */
 const PrismaHero = () => {
   return (
-    <section className="w-full py-20 sm:py-28">
-      <div className="relative w-full min-h-[480px] sm:min-h-[560px] overflow-hidden rounded-2xl md:rounded-[2rem]">
+    <section className="w-full pt-12 pb-8 sm:pt-16 sm:pb-12">
+      <div className="relative w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
 
         {/* ── Background: diagonal green/yellow split with $ pattern ── */}
         {/* Yellow base — fills right portion */}
@@ -99,12 +99,15 @@ const PrismaHero = () => {
 
         {/* Green left portion, clipped diagonally */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 hidden lg:block"
           style={{
             backgroundColor: '#1B5E20',
             clipPath: 'polygon(0 0, 58% 0, 40% 100%, 0 100%)',
           }}
         />
+
+        {/* Stacked screens keep the heading on green and the copy on yellow. */}
+        <div className="absolute inset-0 bg-brand-green-900 lg:hidden" />
 
         {/* Repeating $ sign texture over entire background */}
         <div
@@ -115,8 +118,8 @@ const PrismaHero = () => {
           }}
         />
 
-        {/* Hero content — shifted toward top */}
-        <div className="absolute inset-0 flex items-start pt-4 sm:pt-6 px-4 sm:px-6 md:px-10">
+        {/* Natural height crops the empty space without clipping content. */}
+        <div className="relative px-4 py-8 sm:px-6 sm:py-10 md:px-10">
           <div className="grid grid-cols-12 items-center gap-6 w-full">
 
             {/* Large tagline text — left column (on green) */}
@@ -135,7 +138,7 @@ const PrismaHero = () => {
             </div>
 
             {/* Value prop + CTAs — right column (on yellow, dark text for contrast) */}
-            <div className="col-span-12 flex flex-col gap-5 lg:col-span-5">
+            <div className="col-span-12 flex flex-col gap-5 rounded-xl bg-brand-yellow-700 p-5 sm:p-6 lg:col-span-5 lg:rounded-none lg:bg-transparent lg:p-0">
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -188,7 +191,7 @@ const PrismaHero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 1.1 }}
                 className="text-[10px]"
-                style={{ color: 'rgba(27, 94, 32, 0.5)' }}
+                style={{ color: '#1B5E20' }}
               >
                 * Results vary. Most people see their first $100 in 3–6 months with consistent effort.
               </motion.p>

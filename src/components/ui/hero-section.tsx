@@ -87,7 +87,7 @@ function HeroSection() {
   return (
     <main ref={timelineRef} className="bg-white">
       {/* ── Main content ───────────────────────────────────────────── */}
-      <div className="pt-16 pb-8 max-w-screen-xl mx-auto min-h-[80vh] px-4">
+      <div className="pt-16 pb-8 max-w-screen-xl mx-auto px-4">
         <article className="w-fit mx-auto max-w-3xl text-center space-y-6">
 
           {/* Badge */}

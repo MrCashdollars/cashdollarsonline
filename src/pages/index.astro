@@ -1,12 +1,14 @@
 ---
 // Homepage — /
-// Section order follows component file order (1.txt → 6.txt):
-//   1. PrismaHero        — full-screen brand hero with animated tagline
+// Homepage section order:
+//   1. PrismaHero        — content-height brand hero with animated tagline
 //   2. HeroSection       — content category showcase with animated grid
 //   3. StickyFeatureSection — three income paths (sticky scroll)
 //   4. Email capture strip + LeadMagnetDialog CTA
-//   5. AIAssistantInterface — CDO chatbot (placed below email capture per user spec)
-//   6. BlogCards + TestimonialMarquee
+//   5. BlogCards         — articles and link to the blog
+//   6. YouTubeVideosPlaceholder — reserved video previews
+//   7. AIAssistantInterface — CDO chatbot
+//   8. TestimonialMarquee
 
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { PrismaHero } from '../components/ui/prisma-hero'
@@ -15,6 +17,7 @@ import { StickyFeatureSection } from '../components/ui/sticky-scroll-cards-secti
 import { LeadMagnetDialog } from '../components/ui/dialog'
 import { AIAssistantInterface } from '../components/ui/ai-assistant-interface'
 import { BlogCards, TestimonialMarquee } from '../components/ui/cards'
+import YouTubeVideosPlaceholder from '../components/sections/YouTubeVideosPlaceholder.astro'
 
 const schemaOrg = JSON.stringify({
   '@context': 'https://schema.org',
@@ -33,7 +36,7 @@ const schemaOrg = JSON.stringify({
   schemaJson={schemaOrg}
 >
 
-  <!-- ① Prisma Hero (1.txt) — full-screen, above the fold -->
+  <!-- ① Prisma Hero (1.txt) — content-height brand introduction -->
   <PrismaHero client:load />
 
   <!-- ② Content category showcase (2.txt) -->
@@ -69,6 +72,9 @@ const schemaOrg = JSON.stringify({
 
   <!-- ⑤ Blog post cards (6.txt) — moved above AI chatbot per user feedback -->
   <BlogCards client:visible />
+
+  <!-- Video previews reserved between the blog and the AI assistant. -->
+  <YouTubeVideosPlaceholder />
 
   <!-- ⑥ AI Chatbot (5.txt) — below blog section -->
   <section aria-labelledby="chatbot-heading" class="border-t border-gray-100">

@@ -1,6 +1,6 @@
 'use client'
 import { motion, useInView } from 'framer-motion'
-import { useRef, type ElementType, type ComponentPropsWithoutRef, type ReactNode } from 'react'
+import { useRef, type ElementType, type JSX, type ReactNode } from 'react'
 
 type AnyProps = Record<string, unknown>
 
@@ -43,8 +43,8 @@ export function TimelineContent({
   const isInView = useInView(ref as React.RefObject<Element>, { once: true })
   const variants = customVariants ?? defaultVariants
 
-  // motion() creates a motion-enhanced version of any HTML element
-  const MotionTag = motion(Tag as keyof JSX.IntrinsicElements) as React.ComponentType<AnyProps>
+  // Create a motion-enhanced version of the requested HTML element.
+  const MotionTag = motion.create(Tag as keyof JSX.IntrinsicElements) as React.ComponentType<AnyProps>
 
   return (
     <MotionTag

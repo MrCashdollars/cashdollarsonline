@@ -61,7 +61,7 @@ const plausibleHost = import.meta.env.PLAUSIBLE_API_HOST ?? 'https://plausible.i
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
 
-    <!-- TODO: add <link rel="icon"> once logo asset is received from user -->
+    <link rel="icon" type="image/png" href="/logo.png" />
     <!-- TODO: add <link rel="preconnect"> for Google Fonts (Inter) once confirmed -->
 
     {schemaJson && <script type="application/ld+json" set:html={schemaJson} />}

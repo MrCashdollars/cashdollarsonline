@@ -46,7 +46,9 @@ const useScrollAnimation = (): [React.RefObject<HTMLDivElement | null>, boolean]
     const element = ref.current
     if (!element) return
     const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
+      ([entry]) => {
+        if (entry) setInView(entry.isIntersecting)
+      },
       { root: null, rootMargin: '0px', threshold: 0.1 }
     )
     observer.observe(element)
@@ -92,7 +94,7 @@ export function StickyFeatureSection() {
     <div className="bg-gray-50 font-sans">
       <div className="px-[5%]">
         <div className="max-w-7xl mx-auto">
-          <section className="py-24 md:py-40 flex flex-col items-center">
+          <section className="pt-12 pb-24 md:pt-16 md:pb-32 flex flex-col items-center">
             <AnimatedHeader />
 
             <div className="w-full">

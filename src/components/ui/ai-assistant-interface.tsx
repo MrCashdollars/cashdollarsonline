@@ -154,9 +154,11 @@ export function AIAssistantInterface() {
               } else {
                 setMessages((prev) => {
                   const updated = [...prev]
+                  const lastMessage = updated[updated.length - 1]
+                  if (!lastMessage) return updated
                   updated[updated.length - 1] = {
                     role: 'assistant',
-                    content: updated[updated.length - 1].content + parsed.token,
+                    content: lastMessage.content + parsed.token,
                   }
                   return updated
                 })
