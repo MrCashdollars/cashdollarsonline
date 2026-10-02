@@ -44,6 +44,19 @@ const plausibleHost = import.meta.env.PLAUSIBLE_API_HOST ?? 'https://plausible.i
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Apply saved appearance before the first paint on every route. -->
+    <script is:inline>
+      (() => {
+        let preference = 'white'
+        try {
+          const saved = localStorage.getItem('cdo-site-theme') ?? localStorage.getItem('cdo-creator-screen-theme')
+          if (['black', 'white', 'auto'].includes(saved)) preference = saved
+        } catch { /* Appearance still works without browser storage. */ }
+        const root = document.documentElement
+        root.dataset.appearance = preference
+        root.dataset.theme = preference === 'black' || (preference === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'black' : 'white'
+      })()
+    </script>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
 

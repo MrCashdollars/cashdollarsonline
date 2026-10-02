@@ -42,14 +42,14 @@ const schemaArticle = JSON.stringify({
     <a
       href="/blog"
       class="inline-flex items-center gap-1 text-sm font-medium no-underline mb-10 transition-opacity hover:opacity-70"
-      style="color:#2E7D32"
+      style="color:var(--site-link)"
     >
       ← Back to Blog
     </a>
 
     <header class="mb-10">
       {post.categories.length > 0 && (
-        <span class="text-xs font-semibold uppercase tracking-widest" style="color:#2E7D32">
+        <span class="text-xs font-semibold uppercase tracking-widest" style="color:var(--site-link)">
           {post.categories[0]}
         </span>
       )}
@@ -84,7 +84,7 @@ const schemaArticle = JSON.stringify({
     <!-- Email CTA — required per CLAUDE.md §5.4 -->
     <div
       class="my-12 p-6 rounded-2xl border-2"
-      style="border-color:#2E7D32;background:#f0fdf4"
+      style="border-color:var(--site-link);background:var(--site-tint)"
     >
       <h3 class="text-lg font-bold text-gray-900 mb-1">Get the Free Starter Guide</h3>
       <p class="text-sm text-gray-600 mb-4">
@@ -104,7 +104,7 @@ const schemaArticle = JSON.stringify({
       <a
         href="/blog"
         class="text-sm font-semibold no-underline"
-        style="color:#2E7D32"
+        style="color:var(--site-link)"
       >
         ← Back to all articles
       </a>
@@ -120,7 +120,7 @@ const schemaArticle = JSON.stringify({
   .wp-content :global(h3),
   .wp-content :global(h4) {
     font-weight: 700;
-    color: #111827;
+    color: var(--site-text);
     margin-top: 2rem;
     margin-bottom: 0.75rem;
     line-height: 1.3;
@@ -128,7 +128,7 @@ const schemaArticle = JSON.stringify({
   .wp-content :global(h2) { font-size: 1.5rem; }
   .wp-content :global(h3) { font-size: 1.25rem; }
   .wp-content :global(p) { margin: 1rem 0; line-height: 1.75; }
-  .wp-content :global(a) { color: #2E7D32; text-decoration: underline; }
+  .wp-content :global(a) { color: var(--site-link); text-decoration: underline; }
   .wp-content :global(a:hover) { opacity: 0.8; }
   .wp-content :global(ul) { list-style: disc; margin: 1rem 0; padding-left: 1.5rem; }
   .wp-content :global(ol) { list-style: decimal; margin: 1rem 0; padding-left: 1.5rem; }
@@ -138,23 +138,23 @@ const schemaArticle = JSON.stringify({
     border-left: 4px solid #2E7D32;
     padding-left: 1rem;
     margin: 1.5rem 0;
-    color: #4b5563;
+    color: var(--site-muted);
     font-style: italic;
   }
   .wp-content :global(pre) {
-    background: #f3f4f6;
+    background: var(--site-subtle);
     padding: 1rem;
     border-radius: 0.5rem;
     overflow-x: auto;
     margin: 1.5rem 0;
   }
   .wp-content :global(code) {
-    background: #f3f4f6;
+    background: var(--site-subtle);
     padding: 0.15em 0.4em;
     border-radius: 0.25rem;
     font-size: 0.875em;
   }
   .wp-content :global(strong) { font-weight: 700; }
   .wp-content :global(em) { font-style: italic; }
-  .wp-content :global(hr) { border: none; border-top: 1px solid #e5e7eb; margin: 2rem 0; }
+  .wp-content :global(hr) { border: none; border-top: 1px solid var(--site-border); margin: 2rem 0; }
 </style>

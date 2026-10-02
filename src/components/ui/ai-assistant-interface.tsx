@@ -443,10 +443,10 @@ function CommandButton({ icon, label, isActive, onClick }: CommandButtonProps) {
           ? 'border-brand-green-200 shadow-sm'
           : 'bg-white border-gray-200 hover:border-gray-300'
       }`}
-      style={isActive ? { backgroundColor: '#E8F5E9', borderColor: '#A5D6A7' } : {}}
+      style={isActive ? { backgroundColor: 'var(--site-tint)', borderColor: 'var(--site-link)' } : {}}
     >
-      <div style={{ color: isActive ? '#2E7D32' : '#6b7280' }}>{icon}</div>
-      <span className="text-sm font-medium" style={{ color: isActive ? '#1B5E20' : '#374151' }}>
+      <div style={{ color: isActive ? 'var(--site-link)' : 'var(--site-muted)' }}>{icon}</div>
+      <span className="text-sm font-medium" style={{ color: isActive ? 'var(--site-link)' : 'var(--site-text)' }}>
         {label}
       </span>
     </motion.button>

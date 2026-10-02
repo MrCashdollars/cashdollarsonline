@@ -2,6 +2,7 @@
 // Site-wide sticky navigation — rendered by BaseLayout on every page.
 // Active state detection uses Astro.url.pathname (server-side, no JS needed).
 
+import SiteAppearance from './site-appearance.astro'
 const currentPath = Astro.url.pathname
 
 function isActive(href: string): boolean {
@@ -39,7 +40,7 @@ const navLinks = [
         </a>
 
         <!-- Desktop links -->
-        <nav class="hidden md:flex items-center gap-0.5" aria-label="Main links">
+        <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main links">
           {navLinks.map(({ href, label }) => (
             <a
               href={href}
@@ -58,7 +59,7 @@ const navLinks = [
         <div class="flex items-center gap-2">
           <a
             href="/free-guides"
-            class="cta-pill hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold no-underline transition-opacity duration-150 hover:opacity-90"
+            class="cta-pill hidden lg:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold no-underline transition-opacity duration-150 hover:opacity-90"
             aria-label="Get the free starter guide"
           >
             Free Guide
@@ -67,10 +68,11 @@ const navLinks = [
             </svg>
           </a>
 
+          <SiteAppearance />
           <button
             id="mobile-menu-toggle"
             type="button"
-            class="md:hidden p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            class="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
             aria-controls="mobile-menu"
             aria-expanded="false"
             aria-label="Toggle navigation menu"
@@ -90,7 +92,7 @@ const navLinks = [
     <!-- Mobile dropdown -->
     <div
       id="mobile-menu"
-      class="hidden md:hidden bg-white border-t border-gray-100"
+      class="hidden lg:hidden bg-white border-t border-gray-100"
       role="navigation"
       aria-label="Mobile navigation"
     >
@@ -127,29 +129,29 @@ const navLinks = [
 <style>
   /* Active link — brand green tint */
   .nav-link {
-    color: #4b5563; /* gray-600 */
+    color: var(--site-muted);
   }
   .nav-link:hover {
-    color: #111827;
-    background-color: #f9fafb;
+    color: var(--site-text);
+    background-color: var(--site-subtle);
   }
   .nav-link--active {
-    color: #2E7D32 !important;
-    background-color: #f0fdf4 !important;
+    color: var(--site-link) !important;
+    background-color: var(--site-tint) !important;
     font-weight: 600;
   }
 
   /* Mobile links */
   .mobile-nav-link {
-    color: #374151; /* gray-700 */
+    color: var(--site-muted);
   }
   .mobile-nav-link:hover {
-    color: #111827;
-    background-color: #f9fafb;
+    color: var(--site-text);
+    background-color: var(--site-subtle);
   }
   .mobile-nav-link--active {
-    color: #2E7D32 !important;
-    background-color: #f0fdf4 !important;
+    color: var(--site-link) !important;
+    background-color: var(--site-tint) !important;
     font-weight: 600;
   }
 

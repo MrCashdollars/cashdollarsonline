@@ -1,0 +1,45 @@
+<fieldset class="site-appearance">
+  <legend class="sr-only">Website appearance</legend>
+  <div class="appearance-options">
+    {['black', 'white', 'auto'].map(mode => (
+      <label>
+        <input type="radio" name="website-appearance" value={mode} checked={mode === 'white'} />
+        <span>{mode.charAt(0).toUpperCase() + mode.slice(1)}</span>
+      </label>
+    ))}
+  </div>
+</fieldset>
+
+<style>
+  .site-appearance { border: 0; padding: 0; margin: 0; }
+  .appearance-options { display: flex; border: 1px solid var(--site-border); border-radius: 999px; padding: 3px; gap: 2px; background: var(--site-subtle); }
+  label { position: relative; cursor: pointer; }
+  input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  span { display: block; padding: 7px 10px; border-radius: 999px; font-size: 12px; line-height: 18px; font-weight: 600; color: var(--site-text); }
+  input:checked + span { background: #FBC02D; color: #111827; }
+  input:focus-visible + span { outline: 2px solid var(--site-text); outline-offset: 2px; }
+</style>
+
+<script>
+  const root = document.documentElement
+  const controls = document.querySelectorAll<HTMLInputElement>('input[name="website-appearance"]')
+  const media = window.matchMedia('(prefers-color-scheme: dark)')
+  const valid = (value: string | null | undefined): value is 'black' | 'white' | 'auto' => ['black', 'white', 'auto'].includes(value ?? '')
+  const apply = (preference: string) => {
+    root.dataset.appearance = preference
+    root.dataset.theme = preference === 'black' || (preference === 'auto' && media.matches) ? 'black' : 'white'
+    controls.forEach(control => { control.checked = control.value === preference })
+  }
+  apply(valid(root.dataset.appearance) ? root.dataset.appearance : 'white')
+  controls.forEach(control => control.addEventListener('change', () => {
+    if (!control.checked || !valid(control.value)) return
+    apply(control.value)
+    try { localStorage.setItem('cdo-site-theme', control.value) } catch { /* Storage is optional. */ }
+  }))
+  media.addEventListener('change', () => {
+    if (root.dataset.appearance === 'auto') apply('auto')
+  })
+  window.addEventListener('storage', event => {
+    if (event.key === 'cdo-site-theme') apply(valid(event.newValue) ? event.newValue : 'white')
+  })
+</script>

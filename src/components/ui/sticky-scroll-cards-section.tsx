@@ -14,7 +14,7 @@ const features = [
       'Recommend products and tools you actually use. When someone buys through your link, you earn a commission. No inventory, no customer service. Takes 3–6 months to see consistent income — but it compounds.',
     imageUrl:
       'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop',
-    bgColor: 'bg-[#E8F5E9]',   // brand green-50 — money/growth theme
+    bgColor: 'bg-[var(--site-tint)]',
     textColor: 'text-gray-700',
   },
   {
@@ -23,7 +23,7 @@ const features = [
       'Create an ebook, template, or mini-course once — then sell it as many times as you want. The work is upfront; the sales can continue for years. Best for people with a specific skill or knowledge to share.',
     imageUrl:
       'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop',
-    bgColor: 'bg-[#FFFDE7]',   // brand yellow-50 — creativity/product theme
+    bgColor: 'bg-[var(--site-warm)]',
     textColor: 'text-gray-700',
   },
   {
