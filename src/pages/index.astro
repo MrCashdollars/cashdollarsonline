@@ -72,6 +72,13 @@ const schemaOrg = JSON.stringify({
 
   <!-- ⑤ Blog post cards (6.txt) — moved above AI chatbot per user feedback -->
   <BlogCards client:visible />
+  <!-- All previews remain readable on touch devices without JavaScript. -->
+  <noscript>
+    <style is:inline>
+      .article-depth-gallery[data-depth='true'] { display: grid; height: auto; perspective: none; overflow: visible; container-type: normal; }
+      .article-depth-gallery[data-depth='true'] .article-depth-card { position: static; width: auto; transform: none !important; opacity: 1 !important; z-index: auto !important; will-change: auto; }
+    </style>
+  </noscript>
 
   <!-- Video previews reserved between the blog and the AI assistant. -->
   <YouTubeVideosPlaceholder />
