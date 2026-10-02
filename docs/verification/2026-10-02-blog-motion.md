@@ -1,5 +1,11 @@
 # Homepage blog motion and creator scene — 2026-10-02
 
+## Follow-up: screen appearance
+
+Added the requested Black / White / Auto segmented radio selector to the message panel. Black remains the default. White uses the existing dark text color on white; Auto follows prefers-color-scheme through CSS, including live device-setting changes. Selection persists in localStorage; unavailable storage does not prevent switching. Text, cursor, divider, and focus indicator inherit the selected screen colors.
+
+Browser verification covered explicit black/white colors, Auto in light and dark settings, persistence after reload, native radio keyboard arrows, equal panel heights across themes (302px at1440), and360px mobile without horizontal overflow. Fresh built-page checks had zero page errors, including a context with blocked storage. Screenshots screen-theme-mobile.png and screen-theme-built-mobile.png were inspected in research-output. Typecheck and production build passed; existing test suite passed12 tests. The live website remains unchanged.
+
 ## Follow-up: avatar relocation
 
 The owner's next annotated screenshot moved the avatar and message from the blog to the left of the content category section, immediately below the main brand banner. The current scene is rendered once in HeroSection, through CreatorWorkspace. Its typing timer, visibility handling, reduced-motion preference, and Pause typing control now operate independently of the blog gallery. The blog gallery uses its full 1200px container. At widths of 900px and below, the avatar/message stack above the income heading and category cards.
