@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { articlePosition } from '../../lib/article-gallery'
 import './blog-spotlight.css'
 
-const message = 'Stop chasing shortcuts. Build a skill. Solve a real problem. Create something worth paying for. One honest step at a time. We don’t sell dreams. We provide roadmaps.'
 // Existing draft article previews. The connected CMS does not yet contain these posts.
 const posts = [
   { slug: 'affiliate-marketing-beginners-guide', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=800&auto=format&fit=crop&q=60', title: "Affiliate Marketing: A Beginner's Honest Guide", category: 'Affiliate Marketing', readTime: '8 min read' },
@@ -23,18 +22,16 @@ export function BlogCards() {
   const [paused, setPaused] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
-  const [characters, setCharacters] = useState(message.length)
-  const finished = characters >= message.length
   const running = ready && inView && visible && !reduced && !paused && !hovered && !focused
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
     const syncMotion = () => {
       setReduced(media.matches)
-      if (media.matches) setCharacters(message.length)
+
     }
     syncMotion()
-    if (!media.matches) setCharacters(0)
+
     setReady(true)
     media.addEventListener('change', syncMotion)
     const observer = new IntersectionObserver(([entry]) => setInView(Boolean(entry?.isIntersecting)), { threshold: 0.12 })
@@ -76,40 +73,13 @@ export function BlogCards() {
     return () => { cancelAnimationFrame(frame); resize.disconnect() }
   }, [ready, reduced, running])
 
-  useEffect(() => {
-    if (!running) return
-    // Leave the completed message readable before replaying the typing sequence.
-    if (finished) {
-      const restart = window.setTimeout(() => setCharacters(0), 6500)
-      return () => window.clearTimeout(restart)
-    }
-    const timer = window.setInterval(() => setCharacters(count => Math.min(count + 1, message.length)), 65)
-    return () => window.clearInterval(timer)
-  }, [running, finished])
-
   return (
-    <section ref={section} className="blog-spotlight" aria-labelledby="blog-spotlight-heading" data-running={running} data-typing={running && characters < message.length}>
+    <section ref={section} className="blog-spotlight" aria-labelledby="blog-spotlight-heading" data-running={running}>
       <header className="blog-spotlight-heading">
         <h2 id="blog-spotlight-heading">From the Blog</h2>
         <p>Honest, practical articles on building supplemental income. No fluff, no recycled advice.</p>
       </header>
       <div className="blog-spotlight-layout">
-        <div className="creator-workspace">
-          <div className="avatar-typing" role="img" aria-label="Your avatar seated facing right, looking at his laptop and typing">
-            <div className="avatar-laptop-brand" aria-hidden="true">
-              <span>CashDollarsOnline</span>
-              <img src="/logo.png" width="500" height="500" alt="" loading="lazy" />
-            </div>
-          </div>
-          <div className="creator-message">
-            <div className="creator-message-label" aria-hidden="true"><span className="message-status-dot" /> A roadmap worth building</div>
-            <p className="sr-only">{message}</p>
-            <div className="creator-message-text" aria-hidden="true">
-              <p className="creator-message-reserve">{message}</p>
-              <p className="creator-message-copy">{message.slice(0, characters)}<span className="typing-cursor" /></p>
-            </div>
-          </div>
-        </div>
         <div className="article-gallery-area">
           <div className="article-gallery-toolbar">
             <p>Ideas to put into practice</p>

@@ -1,5 +1,13 @@
 # Homepage blog motion and creator scene — 2026-10-02
 
+## Follow-up: avatar relocation
+
+The owner's next annotated screenshot moved the avatar and message from the blog to the left of the content category section, immediately below the main brand banner. The current scene is rendered once in HeroSection, through CreatorWorkspace. Its typing timer, visibility handling, reduced-motion preference, and Pause typing control now operate independently of the blog gallery. The blog gallery uses its full 1200px container. At widths of 900px and below, the avatar/message stack above the income heading and category cards.
+
+Relocation verification: all 12 tests passed; typecheck zero errors/zero warnings (17 existing hints); production build passed. Chromium widths1920/1440/1024 use side-by-side placement, and768/390/360 stack the scene above the category content. Outer gutters are equal at all six widths, with no horizontal overflow. Typing advances and its pause control freezes text. Reduced motion shows the full message with no avatar animation. A fresh production-page context had zero browser errors; the full-width blog still moves. JavaScript-disabled mobile renders one scene with the complete message and no overflow. Screenshots avatar-moved-built-desktop.png and avatar-moved-built-mobile.png were inspected in the parent workspace's research-output folder. Changes remain local and unpublished.
+
+The original placement and checks below describe the earlier feature commit.
+
 ## Scope
 
 The owner requested a right-to-left article gallery with perspective depth, and their avatar seated to the left of the blog section, facing right and typing on a branded laptop. A separate black panel displays white motivational text. The earlier hero spacing and YouTube placeholder changes remain intact.

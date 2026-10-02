@@ -2,22 +2,28 @@
 .blog-spotlight-heading { text-align: center; max-width: 580px; margin: 0 auto 40px; }
 .blog-spotlight-heading h2 { font-size: 32px; font-weight: 600; color: #111827; }
 .blog-spotlight-heading p { font-size: 14px; line-height: 1.6; color: #4b5563; margin-top: 8px; }
-.blog-spotlight-layout { max-width: 1400px; margin: auto; display: grid; grid-template-columns: minmax(300px, .85fr) minmax(0, 1.7fr); gap: 48px; align-items: center; }
+.blog-spotlight-layout { max-width: 1200px; margin: auto; }
+.creator-category-section { padding: 0 24px 16px; }
+.creator-category-layout { max-width: 1400px; margin: auto; display: grid; grid-template-columns: minmax(300px, .9fr) minmax(0, 2.1fr); gap: 48px; align-items: start; }
+.creator-category-content { min-width: 0; }
 .creator-workspace { min-width: 0; }
 .avatar-typing { width: 100%; aspect-ratio: 1; position: relative; background: url('/avatar/typing-sprite.webp') 0 0 / 200% 100% no-repeat; animation: avatar-type .38s steps(1) infinite; animation-play-state: paused; }
-.blog-spotlight[data-typing='true'] .avatar-typing { animation-play-state: running; }
+.creator-workspace[data-typing='true'] .avatar-typing { animation-play-state: running; }
 @keyframes avatar-type { 0%, 49.99% { background-position: 0 0; } 50%, 100% { background-position: 100% 0; } }
 .avatar-laptop-brand { position: absolute; left: 68.3%; top: 34.6%; width: 14.2%; display: flex; align-items: center; flex-direction: column; gap: 3px; transform: skewX(-19deg); }
 .avatar-laptop-brand span { color: #fff; font-size: clamp(5px, .48vw, 8px); font-weight: 700; white-space: nowrap; }
 .avatar-laptop-brand img { width: 48%; height: auto; }
 .creator-message { min-height: 214px; border-radius: 12px; background: #000; color: #fff; padding: 22px 24px; margin-top: 12px; box-shadow: 0 8px 24px #1118270d; }
 .creator-message-label { display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; border-bottom: 1px solid #ffffff30; padding-bottom: 13px; }
+.creator-message-label button { margin-left: auto; flex-shrink: 0; padding: 5px 0 5px 8px; font-size: 10px; font-weight: 400; letter-spacing: 0; text-transform: none; color: #fff; }
+.creator-message-label button:disabled { opacity: .6; }
+.creator-message-label button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .message-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #FBC02D; flex-shrink: 0; }
 .creator-message-text { display: grid; }
 .creator-message-text > p { grid-area: 1 / 1; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 15px; line-height: 1.7; padding-top: 15px; }
 .creator-message-reserve { visibility: hidden; }
 .typing-cursor { display: inline-block; width: 6px; height: 1em; margin-left: 3px; background: #fff; vertical-align: -.12em; opacity: 0; }
-.blog-spotlight[data-typing='true'] .typing-cursor { animation: message-cursor 1s steps(1) infinite; }
+.creator-workspace[data-typing='true'] .typing-cursor { animation: message-cursor 1s steps(1) infinite; }
 @keyframes message-cursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 .article-gallery-area { min-width: 0; }
 .article-gallery-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 12px; }
@@ -43,13 +49,18 @@
 .blog-all-articles { display: block; width: fit-content; margin: 40px auto 0; font-size: 14px; color: #2E7D32; font-weight: 600; text-decoration: none; }
 .blog-all-articles:hover { text-decoration: underline; }
 @media (max-width: 1050px) {
-  .blog-spotlight-layout { gap: 24px; grid-template-columns: minmax(280px, 1fr) minmax(0, 1.5fr); }
+  .creator-category-layout { gap: 24px; grid-template-columns: minmax(280px, 1fr) minmax(0, 2fr); }
   .article-depth-gallery[data-depth='true'] .article-depth-card { width: 225px; }
   .article-gallery-toolbar { flex-wrap: wrap; }
 }
+@media (max-width: 900px) {
+  .creator-category-section { padding: 0 20px 16px; }
+  .creator-category-layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .creator-workspace { max-width: 440px; width: 100%; margin: auto; }
+  .avatar-laptop-brand span { font-size: 6px; }
+}
 @media (max-width: 760px) {
   .blog-spotlight { padding: 48px 20px 40px; }
-  .blog-spotlight-layout { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .creator-workspace { max-width: 440px; width: 100%; margin: auto; }
   .avatar-laptop-brand span { font-size: 6px; }
   .creator-message { min-height: 212px; }

@@ -12,6 +12,7 @@ import { useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { ProgressiveBlur } from '@/components/ui/progressive-blur'
 import { TimelineContent } from '@/components/ui/timeline-animation'
+import { CreatorWorkspace } from '@/components/ui/creator-workspace'
 
 // CDO content categories — replaces UILayouts block categories
 const contentCategories = [
@@ -85,9 +86,11 @@ function HeroSection() {
   const timelineRef = useRef<HTMLDivElement>(null)
 
   return (
-    <main ref={timelineRef} className="bg-white">
+    <section ref={timelineRef} className="bg-white creator-category-section" aria-label="Practical income roadmaps">
       {/* ── Main content ───────────────────────────────────────────── */}
-      <div className="pt-16 pb-8 max-w-screen-xl mx-auto px-4">
+      <div className="creator-category-layout">
+        <CreatorWorkspace />
+      <div className="creator-category-content pt-12 pb-8">
         <article className="w-fit mx-auto max-w-3xl text-center space-y-6">
 
           {/* Badge */}
@@ -187,7 +190,8 @@ function HeroSection() {
           ))}
         </div>
       </div>
-    </main>
+      </div>
+    </section>
   )
 }
 
