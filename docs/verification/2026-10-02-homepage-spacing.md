@@ -42,3 +42,11 @@ These checks cover the requested homepage adjustments, existing regression suite
 An early development screenshot caused a caret-style hydration warning while a lazy component was loading. A fresh built-package run that waited for hydration produced no console errors. The production source did not need a hydration workaround.
 
 The work is committed locally for preview. No production deployment or remote branch write has been performed.
+
+## Release preparation
+
+After owner approval, fetch and compare the production branch again, preserve any intervening changes, and release the reviewed homepage commit through the existing repository and hosting workflow. Do not force-push. Confirm the hosting project and its production branch before triggering a build.
+
+After deployment, verify the public homepage responds successfully, generated assets load, the shorter hero and video section are present, the section order and mobile layout match the preview, and the console remains clear. Confirm the existing chat endpoint is preserved without making a paid test request or sending subscriber emails.
+
+The previous website source is `c09b838`. The reviewed code change is commit `0663458`; reverting that commit restores the previous layout and removes the new placeholder without rewriting Git history. If the deployed homepage fails the health checks, use the host's previous working deployment or a normal revert through the same release workflow, preserving unrelated newer commits.
